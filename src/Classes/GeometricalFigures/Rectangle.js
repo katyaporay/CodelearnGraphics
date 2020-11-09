@@ -9,8 +9,8 @@ export default class Rectangle
         this.segmentY = new Segment(this.pointMin.y, this.pointMax.y);
     }
 
-    isCollide(rectangle2)
+    hasOverlap(rectangle2)
     {
-        return (this.segmentX.isCollide(rectangle2.segmentX) && this.segmentY.isCollide(rectangle2.segmentY));
+        return (this.segmentX.hasOverlap(rectangle2.segmentX) && this.segmentY.hasOverlap(rectangle2.segmentY));
     }
 }

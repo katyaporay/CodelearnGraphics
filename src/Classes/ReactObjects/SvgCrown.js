@@ -1,19 +1,18 @@
 import React from "react";
 import TweenOne from "rc-tween-one";
-import Object from "../Object";
 import Animations from "../../Models/Animations";
 import {objectTypes} from "../../Models/ObjectTypes";
+import Constants from "../../Models/Constants";
 
-export default class Crown extends Object {
+export default class SvgCrown extends React.Component {
     constructor(props) {
         super(props);
         const count = 5;
-        const rx = 22;
         this.state = {
-            rx: rx,
-            ry: 8,
+            rx: Constants.crownRx,
+            ry: Constants.crownRy,
             height: 8,
-            width: rx / count,
+            width: Constants.crownRx / count,
             count: count,
             up: 5,
         }
@@ -53,7 +52,7 @@ export default class Crown extends Object {
     render() {
         return (
             <g visibility={this.props.visibility}>
-                <TweenOne component="g" animation={Animations.crownAnim}>
+                <TweenOne component="g" animation={null}>
                     <g>
                         <ellipse cx={this.props.cx} cy={this.props.cy} rx={this.state.rx} ry={this.state.ry}
                                  fill="#FFF700" stroke="#FFDE00" strokeWidth="2"/>

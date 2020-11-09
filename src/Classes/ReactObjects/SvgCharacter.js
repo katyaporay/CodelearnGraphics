@@ -1,10 +1,6 @@
 import React from "react";
 import TweenOne from "rc-tween-one";
 import Animations from "../../Models/Animations";
-import Object from "../Object";
-import Rectangle from "../Rectangle";
-import Point from "../Point";
-import {objectTypes} from "../../Models/ObjectTypes";
 import Constants from "../../Models/Constants";
 
 function Eye(props)
@@ -32,17 +28,65 @@ class Leg extends React.Component
 {
     constructor(props) {
         super(props);
+        let animGo;
+        if (this.props.isBackLeg)
+        {
+            animGo = Animations.animGoLeft;
+        }
+        else
+        {
+            animGo = Animations.animGoRight;
+        }
+        /*animGo[0].onStart = () =>
+        {
+            console.log("moment: 0");
+            this.setState({
+                moment: null,
+        }, () => {
+                console.log("moment: null");
+                this.setState({
+                    moment: 0,
+                });
+        })};*/
+        /*animGo[animGo.length - 1].onComplete = (() =>
+        this.setState({
+            moment: null,
+        }));*/
+        //animGo.onComplete = (() => this.finishAnim());
         this.state = {
-            rx: 11,
-            ry: 25,
+            rx: Constants.legRx,
+            ry: Constants.legRy,
+            baseAnim: animGo,
+            moment: null,
+            lastRepeat: -1,
+            nowAnim: null,
         }
     }
 
     render() {
-        let animGo, x = this.props.x, y = this.props.y;
+        if (this.state.lastRepeat !== this.props.countSteps)
+        {
+            if (this.props.countSteps !== 0) {
+                this.setState({
+                    lastRepeat: this.props.countSteps,
+                    moment: 0,
+                    nowAnim: this.state.baseAnim,
+                }, () => {
+                    this.setState({
+                        moment: null,
+                    })
+                });
+            }
+            else
+            {
+                this.setState({
+                    lastRepeat: this.props.countSteps,
+                });
+            }
+        }
+        let x = this.props.x, y = this.props.y;
         if (this.props.isBackLeg)
         {
-            animGo = Animations.animGoLeft;
             y -= 5;
             if (this.props.isLeft)
             {
@@ -53,17 +97,13 @@ class Leg extends React.Component
                 x += 5;
             }
         }
-        else
-        {
-            animGo = Animations.animGoRight;
-        }
-        //animGo[animGo.length - 1].onComplete = (() => animGo[0].moment = 0);
+        //animGo.repeat = this.props.countSteps;
         return (
             <g>
-                <TweenOne component="g" animation={this.props.paused ? null : animGo}
+                <TweenOne component="g" animation={this.state.nowAnim}
                 style={{transformOrigin: x + "px " + (y - this.state.ry) + "px"}}
-                paused={this.props.paused}
-                >
+                /*paused={this.props.paused}*/ repeat={this.props.countSteps}
+                moment={this.state.moment}>
                     <ellipse cx={x}
                              cy={y}
                              rx={this.state.rx}
@@ -78,24 +118,39 @@ class Leg extends React.Component
     }
 }
 
-export default class Character extends Object {
+export default class SvgCharacter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            rx: 30,
-            ry: 40,
+            rx: Constants.characterRx,
+            ry: Constants.characterRy,
             anim: null,
+            isLeft: false,
         }
-        this.capsule = new Rectangle(
+        /*this.capsule = new Rectangle(
             new Point(this.props.cx - this.state.rx, this.props.cy - this.state.ry),
             new Point(this.props.cx + this.state.rx, this.props.cy + this.state.ry)
         );
-        this.objectType = objectTypes.character;
+        this.objectType = objectTypes.character;*/
     }
 
     render() {
+        if (this.props.anim != null)
+        {
+            if (this.props.anim.x > 0 && !this.state.isLeft)
+            {
+                this.setState({
+                    isLeft: true,
+                })
+            }
+            if (this.props.anim.x < 0 && this.state.isLeft)
+            {
+                this.setState({
+                    isLeft: false,
+                })
+            }
+        }
         return (
-
             <g>
                 <TweenOne component="g" animation={this.props.anim}>
                     <g>
@@ -103,7 +158,8 @@ export default class Character extends Object {
                              y={this.props.cy + this.state.ry}
                              paused={this.props.paused}
                              isBackLeg={true}
-                             isLeft={this.props.isLeft}
+                             isLeft={this.state.isLeft}
+                             countSteps={this.props.countSteps}
                         />
                         <ellipse cx={this.props.cx}
                              cy={this.props.cy}
@@ -115,12 +171,14 @@ export default class Character extends Object {
                         <Leg x={this.props.cx}
                              y={this.props.cy + this.state.ry}
                              paused={this.props.paused}
-                             isLeft={this.props.isLeft}
+                             isBackLeg={false}
+                             isLeft={this.state.isLeft}
+                             countSteps={this.props.countSteps}
                         />
                         <Eye x={this.props.cx}
                              y={this.props.cy - this.state.ry / 2}
                              dx={this.state.rx / 2}
-                             isLeft={this.props.isLeft}
+                             isLeft={this.state.isLeft}
                              isBackLeg={false}
                         />
                     </g>

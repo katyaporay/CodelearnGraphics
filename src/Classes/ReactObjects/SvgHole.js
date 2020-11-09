@@ -1,8 +1,7 @@
 import React from "react";
-import Object from "../Object";
 import {objectTypes} from "../../Models/ObjectTypes";
 
-export default class Hole extends Object {
+export default class SvgHole extends React.Component {
     constructor(props) {
         super(props);
         this.objectType = objectTypes.death;
