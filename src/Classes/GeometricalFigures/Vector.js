@@ -28,4 +28,12 @@ export default class Vector
             return 1;
         return 0;
     }
+
+    multiply(k)
+    {
+        return new Vector(
+            new Point(0, 0),
+            new Point(this.point.x * k, this.point.y * k),
+        )
+    }
 }

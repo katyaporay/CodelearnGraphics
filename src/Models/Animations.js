@@ -1,38 +1,60 @@
 import Constants from "./Constants";
 
 export default class Animations {
-    static animGoBack1 = {
-        duration: Constants.durationStep,
-        rotate: 0,
-        ease: "linear",
-        //onComplete: (() => this.animGoBack1.moment = null),
+    static getAnimGoBack1(durationStep)
+    {
+        return {
+            duration: durationStep / 4,
+            rotate: 0,
+            ease: "linear",
+        };
     }
 
-    static animGoForward1 = {
-        duration: Constants.durationStep,
-        rotate: 0,
-        ease: "linear",
-        //onComplete: (() => this.animGoBack2.moment = null),
+    static getAnimGoForward1(durationStep)
+    {
+        return {
+            duration: durationStep / 4,
+            rotate: 0,
+            ease: "linear",
+        }
     }
 
-    static animGoForward2 = {
-        duration: Constants.durationStep,
-        rotate: -31.4,
-        ease: "linear",
-        //onComplete: (() => this.animGoForward1.moment = null),
+    static getAnimGoForward2(durationStep)
+    {
+        return {
+            duration: durationStep / 4,
+            rotate: -31.4,
+            ease: "linear",
+        }
     }
 
-    static animGoBack2 = {
-        duration: Constants.durationStep,
-        rotate: 31.4,
-        ease: "linear",
-        //onComplete: (() => this.animGoForward2.moment = null),
+    static getAnimGoBack2(durationStep)
+    {
+        return {
+            duration: durationStep / 4,
+            rotate: 31.4,
+            ease: "linear",
+        }
     }
 
-    static animGoRight = [this.animGoBack2, this.animGoForward1, this.animGoForward2, this.animGoBack1];
-    static animGoLeft = [this.animGoForward2, this.animGoBack1, this.animGoBack2, this.animGoForward1];
-    //static animGoRight = [this.animGoBack2, this.animGoBack1];
-    //static animGoLeft = [this.animGoForward2, this.animGoForward1];
+    static getAnimGoRight(durationStep)
+    {
+        return [
+            this.getAnimGoBack2(durationStep),
+            this.getAnimGoForward1(durationStep),
+            this.getAnimGoForward2(durationStep),
+            this.getAnimGoBack1(durationStep),
+        ];
+    }
+    static getAnimGoLeft(durationStep)
+    {
+        return [
+            this.getAnimGoForward2(durationStep),
+            this.getAnimGoBack1(durationStep),
+            this.getAnimGoBack2(durationStep),
+            this.getAnimGoForward1(durationStep),
+        ];
+    }
 
     static animFallDown = {
         type: "to",
@@ -53,4 +75,22 @@ export default class Animations {
     static zeroAnim = {
         duration: 0,
     };
+
+    static dialogAppear = {
+        duration: 1000,
+        type: "from",
+        opacity: 0,
+    }
+
+    static dialogShow = {
+        duration: 1000,
+    }
+
+    static dialogDisappear = {
+        duration: 1000,
+        type: "to",
+        opacity: 0,
+    }
+
+    static dialogAnimation = [this.dialogAppear, this.dialogShow, this.dialogDisappear];
 }

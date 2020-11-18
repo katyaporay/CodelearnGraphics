@@ -1,6 +1,6 @@
 import React from "react";
 
-export default class ReactParallelogram extends React.Component
+export default class SvgParallelogram extends React.Component
 {
     render() {
         let pointMin = this.props.parallelogram.pointMin, height = this.props.parallelogram.height,
