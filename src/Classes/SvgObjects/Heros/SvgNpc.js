@@ -2,6 +2,8 @@ import React from "react";
 import Leg from "./Leg";
 import Constants from "../../../Models/Constants";
 import SvgFunctions from "../SvgFunctions";
+import {Eye} from "./Eye";
+import Point from "../../GeometricalFigures/Point";
 
 export default class SvgNpc extends React.Component
 {
@@ -12,6 +14,7 @@ export default class SvgNpc extends React.Component
         const scale = SvgFunctions.getScale(this.props.cx, this.props.cy,
             Constants.npcLegRy + Constants.npcR * 2);
         const transformOrigin = "" + cx + "px " + cy + "px";
+        const innerPoint = new Point(cx - Constants.npcR, cy);
         return (
             <g style={{transformOrigin: transformOrigin}}
                        transform={"scale(" + scale + ")"}>
@@ -24,6 +27,12 @@ export default class SvgNpc extends React.Component
                 <Leg x={cx} y={cy - Constants.npcLegRy} fill={fill} stroke={stroke}
                      isBackLeg={false} isLeft={true} durationStep={0} countSteps={0}
                      rx={Constants.npcLehRx} ry={Constants.npcLegRy}/>
+                <Eye x={cx}
+                     y={cy - Constants.npcLegRy - Constants.npcR / 2 * 3}
+                     isLeft={true}
+                     isBackLeg={false}/>
+                {this.props.linkedObjects.map(object =>
+                    object.getReactComponent(innerPoint.x, innerPoint.y, scale))}
             </g>
         );
     }

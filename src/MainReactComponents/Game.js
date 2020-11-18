@@ -23,12 +23,13 @@ export default class Game extends React.Component
 {
     constructor(props) {
         super(props);
-        const linkedObjects = [new Dialog("Привет!!!\n\nasdfs")];
+        const linkedObjects = [new Dialog("Hello!!! I am a character.")];
         this.state = {
             character: new Character(219, 381,
                 null, 0, 0, linkedObjects),
             objects: [
-                new Npc(Constants.fWidth - Constants.npcR, 100, null, []),
+                new Npc(Constants.fWidth - Constants.npcR, 100, null,
+                    [new Dialog("And I am npc.")]),
                 new Crown(400, 200),
                 new Hole(500, 200, 60),
                 new Wall(new Rectangle(
@@ -220,12 +221,46 @@ export default class Game extends React.Component
             });
     }
 
+    npcSay(message)
+    {
+        let npc;
+        for (let i = 0; i < this.state.objects.length; i++)
+        {
+            if (this.state.objects[i].constructor.name === Npc.name)
+            {
+                npc = this.state.objects[i];
+                break;
+            }
+        }
+        if (npc === null) return;
+        let linkedObjects = npc.linkedObjects;
+        for (let i = 0; i < linkedObjects.length; i++)
+        {
+            if (linkedObjects[i].constructor.name === Dialog.name)
+            {
+                linkedObjects[i] = new Dialog(message);
+            }
+        }
+        let objects = this.state.objects;
+        for (let i = 0; i < objects.length; i++)
+        {
+            if (objects[i].constructor.name === Npc.name)
+            {
+                objects[i] = npc;
+            }
+        }
+        this.setState({
+            objects: objects,
+        });
+    }
+
     render() {
         return(
             <div>
                 <Board character={this.state.character}
                        objects={this.state.objects}/>
                 <GetMessage getMessage={(message) => this.say(message)}/>
+                <GetMessage getMessage={(message) => this.npcSay(message)}/>
                 <div>
                     {"cx = " + this.state.character.center.x}
                 </div>
