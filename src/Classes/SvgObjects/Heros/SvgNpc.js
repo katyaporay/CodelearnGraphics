@@ -20,13 +20,13 @@ export default class SvgNpc extends React.Component
                        transform={"scale(" + scale + ")"}>
                 <Leg x={cx} y={cy - Constants.npcLegRy} fill={fill} stroke={stroke}
                      isBackLeg={true} isLeft={true} durationStep={0} countSteps={0}
-                     rx={Constants.npcLehRx} ry={Constants.npcLegRy}/>
+                     rx={Constants.npcLegRx} ry={Constants.npcLegRy}/>
                 <circle cx={cx} cy={cy - Constants.npcLegRy - Constants.npcR}
                         r={Constants.npcR} fill={fill}
                         strokeWidth="3" stroke={stroke}/>
                 <Leg x={cx} y={cy - Constants.npcLegRy} fill={fill} stroke={stroke}
                      isBackLeg={false} isLeft={true} durationStep={0} countSteps={0}
-                     rx={Constants.npcLehRx} ry={Constants.npcLegRy}/>
+                     rx={Constants.npcLegRx} ry={Constants.npcLegRy}/>
                 <Eye x={cx}
                      y={cy - Constants.npcLegRy - Constants.npcR / 2 * 3}
                      isLeft={true}

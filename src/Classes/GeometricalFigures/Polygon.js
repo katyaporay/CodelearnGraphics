@@ -6,11 +6,40 @@ import React from "react";
 import Constants from "../../Models/Constants";
 import Circle from "./Circle";
 import Ellipse from "./Ellipse";
+import Vector from "./Vector";
 
 export default class Polygon
 {
     constructor(points) {
         this.points = points;
+    }
+
+    getArea()
+    {
+        /*let vector1, vector2;
+        let area = 0;
+        for (let i = 1; i + 1 < this.points.length; i++)
+        {
+            vector1 = new Vector(this.points[0], this.points[i]);
+            vector2 = new Vector(this.points[0], this.points[i + 1]);
+            area += vector1.vectorProduct(vector2);
+        }
+        return Math.abs(area);*/
+        return this.getAreaFromPoint(this.points[0])
+    }
+
+    getAreaFromPoint(point)
+    {
+        let vector1, vector2;
+        let area = 0;
+        for (let i = 0; i < this.points.length; i++)
+        {
+            const j = (i + 1) % this.points.length;
+            vector1 = new Vector(point, this.points[i]);
+            vector2 = new Vector(point, this.points[j]);
+            area += vector1.realVectorProduct(vector2);
+        }
+        return Math.abs(area);
     }
 
     checkHas(point)
@@ -22,11 +51,15 @@ export default class Polygon
         let count = 0;
         for (let i = 0; i < this.points.length; i++)
         {
-            let j = (i + 1) % this.points.length;
+            let j = (i + 1) % this.points.length, k = (j + 1) % this.points.length;
             const segment = new Segment(this.points[i], this.points[j]);
             count += segment.hasOverlap(ray);
+            const middleSegment = new Segment(this.points[i], this.points[k]);
+            count -= (ray.hasPoint(this.points[j]) && middleSegment.hasOverlap(ray));
         }
         return count % 2 === 1;
+        /*const area1 = this.getArea(), area2 = this.getAreaFromPoint(point);
+        return (Math.abs(area1 - area2) < Constants.eps);*/
     }
 
     hasOverlap(figure)
@@ -94,7 +127,6 @@ export default class Polygon
 
     getIntersectionWithPolygon(polygon)
     {
-        if (!this.hasOverlapWithPolygon(polygon)) return null;
         for (let i1 = 0; i1 < polygon.points.length; i1++)
         {
             let i2 = (i1 + 1) % polygon.points.length;
@@ -117,6 +149,7 @@ export default class Polygon
         }
         if (this.checkHas(polygon.points[0])) return polygon.points[0];
         if (polygon.checkHas(this.points[0])) return this.points[0];
+        return null;
     }
 
     getReactComponent()
@@ -140,6 +173,26 @@ export default class Polygon
             maxY = Math.max(maxY, y);
         }
         return [minY, maxY];
+    }
+
+    getMinX()
+    {
+        let minX = this.points[0].x;
+        for (let i = 0; i < this.points.length; i++)
+        {
+            minX = Math.min(minX, this.points[i].x);
+        }
+        return minX;
+    }
+
+    getMaxX()
+    {
+        let maxX = this.points[0].x;
+        for (let i = 0; i < this.points.length; i++)
+        {
+            maxX = Math.max(maxX, this.points[i].x);
+        }
+        return maxX;
     }
 
     getX(y)
@@ -179,7 +232,7 @@ export default class Polygon
         {
             const j = (i + 1) % this.points.length;
             const segment = new Segment(this.points[i], this.points[j]);
-            dist = Math.min(dist, Constants.viewPoint.getDist(segment));
+            dist = Math.min(dist, Constants.viewPoint().getDist(segment));
         }
         return dist;
     }
@@ -199,7 +252,7 @@ export default class Polygon
         let min = 1e9, max = -1e9, minPoint, maxPoint;
         for (let i = 0; i < this.points.length; i++)
         {
-            const segment = new Segment(Constants.viewPoint, this.points[i]);
+            const segment = new Segment(Constants.viewPoint(), this.points[i]);
             const line = segment.getLine();
             if (line.b === 0) continue;
             if (-line.c / line.b < min)
@@ -213,20 +266,23 @@ export default class Polygon
                 maxPoint = this.points[i];
             }
         }
-        return new Polygon([ Constants.viewPoint, minPoint, maxPoint ]);
+        return new Polygon([ Constants.viewPoint(), minPoint, maxPoint ]);
     }
 
     getMinDistToPointOnSegment(segment)
     {
         let minDist = 1e9;
+        let maxDist = -1e9;
         for (let i = 0; i < this.points.length; i++)
         {
             const j = (i + 1) % this.points.length;
             const polygonSegment = new Segment(this.points[i], this.points[j]);
             if (!segment.hasOverlap(polygonSegment)) continue;
             const intersection = segment.getIntersection(polygonSegment);
-            minDist = Math.min(minDist, intersection.getDist(segment.pointA));
+            const dist = intersection.getDist(segment.pointA);
+            minDist = Math.min(minDist, dist);
+            maxDist = Math.max(maxDist, dist)
         }
-        return minDist;
+        return (minDist + maxDist) / 2;
     }
 }

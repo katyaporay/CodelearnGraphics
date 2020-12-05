@@ -10,7 +10,7 @@ import Polygon from "../GeometricalFigures/Polygon";
 import Ellipse from "../GeometricalFigures/Ellipse";
 import SvgFunctions from "../SvgObjects/SvgFunctions";
 
-export default class Crown extends BoardObject
+class Crown extends BoardObject
 {
     constructor(cx, cy) {
         super();
@@ -41,7 +41,7 @@ export default class Crown extends BoardObject
     doesOverlapView(figure)
     {
         const [p1, p2] = this.bearingArea.getVisibilityLimits();
-        const polygon = new Polygon([ Constants.viewPoint, p1, p2 ]);
+        const polygon = new Polygon([ Constants.viewPoint(), p1, p2 ]);
         if (!polygon.hasOverlap(figure))
             return false;
         if (figure.hasOwnProperty('polygon'))

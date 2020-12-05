@@ -9,51 +9,68 @@ import Rectangle from "../GeometricalFigures/Rectangle";
 import SvgPolygon from "../SvgObjects/SvgPolygon";
 import Polygon from "../GeometricalFigures/Polygon";
 import Ellipse from "../GeometricalFigures/Ellipse";
+import Dialog from "../ObjectsToLink/Dialog";
 
 export default class Character extends BoardObject
 {
-    constructor(cx, cy, anim, countSteps, durationStep, linkedObjects) {
+    constructor(cx, cy) {
         super();
-        this.center = new Point(cx, cy);
-        this.anim = anim;
+        this._center = new Point(cx, cy);
         this.bearingArea = this.getBearingArea();
         this.fallingArea = this.getFallingArea();
-        this.countSteps = countSteps;
-        this.durationStep = durationStep;
+        this.durationStep = 0;
         this.objectType = objectTypes.character;
         this.height = Constants.characterRy * 2 + Constants.legRy;
-        this.linkedObjects = linkedObjects;
+        this._linkedObjects = [new Dialog("", Character.name)];
+        this._anim = null;
+        this._countSteps = 0;
+    }
+
+    set anim(value) {
+        this._anim = value;
+    }
+
+    set countSteps(value) {
+        this._countSteps = value;
+    }
+
+    set linkedObjects(value) {
+        this._linkedObjects = value;
+    }
+
+    set center(value) {
+        this._center = value;
     }
 
     setCenter(cx, cy)
     {
-        this.center = new Point(cx, cy);
+        this._center = new Point(cx, cy);
         this.bearingArea = this.getBearingArea();
         this.fallingArea = this.getFallingArea();
     }
 
     setAnim(anim, countSteps, durationStep)
     {
-        this.anim = anim;
-        this.countSteps = countSteps;
+        this._anim = anim;
+        this._countSteps = countSteps;
         this.durationStep = durationStep;
     }
 
     getFallingArea()
     {
-        const pointMin = new Point(this.center.x - Constants.legRx,
-                this.center.y - 3 * Constants.legWidth);
-        const pointMax = new Point(this.center.x + Constants.legRx,
-                this.center.y + Constants.legWidth);
+        const pointMin = new Point(this._center.x - Constants.legRx,
+                this._center.y - 3 * Constants.legWidth);
+        const pointMax = new Point(this._center.x + Constants.legRx,
+                this._center.y + Constants.legWidth);
         return new Rectangle(pointMin, pointMax);
     }
 
     getBearingArea()
     {
-        const pointMin = new Point(this.center.x - Constants.characterRx,
-                this.center.y - Constants.characterRx);
-        const pointMax = new Point(this.center.x + Constants.characterRx,
-                this.center.y + Constants.characterRx);
+        const pointMin = new Point(this._center.x - Constants.characterRx,
+                this._center.y - Constants.characterRx);
+        const pointMax = new Point(this._center.x + Constants.characterRx,
+                this._center.y + Constants.characterRx);
         return new Rectangle(pointMin, pointMax);
     }
 
@@ -74,18 +91,18 @@ export default class Character extends BoardObject
 
     getReactComponent()
     {
-        console.log("from getReactComponent: countSteps = " + this.countSteps);
+        console.log("from getReactComponent: countSteps = " + this._countSteps);
         return <g>
-            <SvgCharacter cx={this.center.x} cy={this.center.y} anim={this.anim}
-                          countSteps={this.countSteps} durationStep={this.durationStep}
-                          linkedObjects={this.linkedObjects}/>
+            <SvgCharacter cx={this._center.x} cy={this._center.y} anim={this._anim}
+                          countSteps={this._countSteps} durationStep={this.durationStep}
+                          linkedObjects={this._linkedObjects}/>
         </g>
     }
 
     getProjection()
     {
-        const scale = SvgFunctions.getScale(this.center.x, this.center.y, this.height);
-        const bottomPoint = SvgFunctions.getSvgPoint(this.center.x, this.center.y);
+        const scale = SvgFunctions.getScale(this._center.x, this._center.y, this.height);
+        const bottomPoint = SvgFunctions.getSvgPoint(this._center.x, this._center.y);
         const body = new Ellipse(bottomPoint.x,
             bottomPoint.y - (Constants.legRy + Constants.characterRy) * scale,
             Constants.characterRx * scale, Constants.characterRy * scale);

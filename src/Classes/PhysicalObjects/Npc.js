@@ -6,13 +6,16 @@ import SvgNpc from "../SvgObjects/Heros/SvgNpc";
 import React from "react";
 import SvgFunctions from "../SvgObjects/SvgFunctions";
 import Ellipse from "../GeometricalFigures/Ellipse";
+import Dialog from "../ObjectsToLink/Dialog";
+import BoardObject from "./BoardObject";
 
-export default class Npc
+export default class Npc extends BoardObject
 {
-    constructor(cx, cy, anim, linkedObjects) {
+    constructor(cx, cy) {
+        super();
         this.center = new Point(cx, cy);
-        this.anim = anim;
-        this.linkedObjects = linkedObjects;
+        this.anim = null;
+        this.linkedObjects = [new Dialog("", Npc.name)];
         this.height = Constants.npcLegRy + Constants.npcR * 2;
         this.objectType = objectTypes.npc;
         this.bearingArea = this.getBearingArea();
@@ -42,7 +45,7 @@ export default class Npc
             bottomPoint.y - (Constants.npcLegRy + Constants.npcR) * scale,
             Constants.npcR * scale, Constants.npcR * scale);
         const leg = new Ellipse(bottomPoint.x, bottomPoint.y - Constants.legRy * scale,
-            Constants.npcLehRx * scale, Constants.npcLegRy * scale);
+            Constants.npcLegRx * scale, Constants.npcLegRy * scale);
         return [body, leg];
     }
 }

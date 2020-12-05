@@ -15,6 +15,7 @@ import Rectangle from "../Classes/GeometricalFigures/Rectangle";
 import TweenOne from "../src/TweenOne";
 import SortObjects from "../Models/SortObjects";
 import Ellipse from "../Classes/GeometricalFigures/Ellipse";
+import SvgItem from "../Classes/SvgObjects/Collections/SvgItem";
 
 function get_xa_xb_mid(minXa, maxXa, minXb, maxXb)
 {
@@ -76,10 +77,12 @@ export default class Board extends React.Component{
         {
             for (let j = i + 1; j < objects.length; j++)
             {
-                const intersection = SortObjects.getIntersection(objects[i], this.props.character);
+                if (i === j)
+                    continue;
+                const intersection = SortObjects.getIntersection(objects[i], objects[j]);
                 if (!intersection) continue;
                 intersections.push(<circle cx={intersection.x} cy={intersection.y}
-                r={5}/>);
+                r={2}/>);
             }
         }*/
 

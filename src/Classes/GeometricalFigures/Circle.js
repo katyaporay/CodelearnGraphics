@@ -92,12 +92,15 @@ export default class Circle
 
     getIntersectionWithSegment(segment)
     {
-        if (!this.hasOverlapWithSegment(segment)) return null;
         const line = segment.getLine();
         const [p1, p2] = this.getIntersectionsWithLine(line);
-        if (p1.getDistToSegment(segment) < p2.getDistToSegment(segment))
+        if (p1.getDistToSegment(segment) < Constants.eps)
             return p1;
-        return p2;
+        if (p2.getDistToSegment(segment) < Constants.eps)
+        {
+            return p2;
+        }
+        return null;
     }
 
     hasOverlapWithPolygon(polygon)
@@ -113,7 +116,6 @@ export default class Circle
 
     getIntersectionWithPolygon(polygon)
     {
-        if (!this.hasOverlapWithPolygon(polygon)) return null;
         for (let i = 0; i < polygon.points.length; i++)
         {
             const j = (i + 1) % polygon.points.length;
@@ -141,12 +143,12 @@ export default class Circle
 
     getMaxDist()
     {
-        return Constants.viewPoint.getDist(this.center) + this.r;
+        return Constants.viewPoint().getDist(this.center) + this.r;
     }
 
     getMinDist()
     {
-        return Constants.viewPoint.getDist(this.center) - this.r;
+        return Constants.viewPoint().getDist(this.center) - this.r;
     }
 
     getIntersectionWithCircle(circle)
@@ -171,9 +173,9 @@ export default class Circle
     getVisibilityLimits()
     {
         const circle = new Circle(
-            (Constants.viewPoint.x + this.center.x) / 2,
-            (Constants.viewPoint.y + this.center.y) / 2,
-            this.center.getDist(Constants.viewPoint) / 2,
+            (Constants.viewPoint().x + this.center.x) / 2,
+            (Constants.viewPoint().y + this.center.y) / 2,
+            this.center.getDist(Constants.viewPoint()) / 2,
         );
         return this.getIntersection(circle);
     }
@@ -192,6 +194,6 @@ export default class Circle
         const p2 = new Point(y0 - line.a * mult, y0 + line.a * mult);
         p1.x += this.center.x; p1.y += this.center.y;
         p2.x += this.center.x; p2.y += this.center.y;
-        return Math.min(p1.getDist(segment.pointA), p2.getDist(segment.pointA));
+        return (p1.getDist(segment.pointA) + p2.getDist(segment.pointA)) / 2;
     }
 }

@@ -90,7 +90,7 @@ export default class SortObjects
             return true;
         intersection = new Point(SvgFunctions.getFirstX(intersection.x), 0);
         //const last = SvgFunctions.getSvgPoint(intersection.x, intersection.y);
-        const segment = new Segment(Constants.viewPoint.getPoint2D(), intersection);
+        const segment = new Segment(Constants.viewPoint().getPoint2D(), intersection);
         return object1.bearingArea.getMinDistToPointOnSegment(segment) <
             object2.bearingArea.getMinDistToPointOnSegment(segment);
     }

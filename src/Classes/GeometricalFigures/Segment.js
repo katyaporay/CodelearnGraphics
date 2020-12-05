@@ -15,20 +15,24 @@ export default class Segment
         let vector1 = new Vector(segment.pointA, this.pointA);
         let vector2 = new Vector(segment.pointA, this.pointB);
         let vector = new Vector(segment.pointA, segment.pointB);
-        const p1 = vector.vectorProduct(vector1) * vector.vectorProduct(vector2);
+        const p1 = vector.vectorProduct(vector1), p2 = vector.vectorProduct(vector2);
 
         vector1 = new Vector(this.pointA, segment.pointA);
         vector2 = new Vector(this.pointA, segment.pointB);
         vector = new Vector(this.pointA, this.pointB);
-        const p2 = vector.vectorProduct(vector1) * vector.vectorProduct(vector2);
+        const q1 = vector.vectorProduct(vector1), q2 = vector.vectorProduct(vector2);
 
-        if (p1 < 0 && p2 < 0)
+        if (p1 * p2 < 0 && q1 * q2 < 0)
         {
             return 1;
         }
         if (this.hasPoint(segment.pointA) || this.hasPoint(segment.pointB) ||
             segment.hasPoint(this.pointA) || segment.hasPoint(this.pointB))
         {
+            if (p1 === 0 && p2 === 0 && q1 === 0 && q2 === 0)
+            {
+                return 2;
+            }
             return 1;
         }
         return 0;

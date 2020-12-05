@@ -1,4 +1,5 @@
 import Point from "./Point";
+import Constants from "../../Models/Constants";
 
 export default class Vector
 {
@@ -9,24 +10,29 @@ export default class Vector
         );
     }
 
+    realVectorProduct(vector)
+    {
+        return this.point.x * vector.point.y - vector.point.x * this.point.y;
+    }
+
     vectorProduct(vector)
     {
-        let vectorProduct = this.point.x * vector.point.y - vector.point.x * this.point.y;
+        let vectorProduct = this.realVectorProduct(vector);
+        if (Math.abs(vectorProduct) < Constants.eps)
+            return 0;
         if (vectorProduct < 0)
             return -1;
-        if (vectorProduct > 0)
-            return 1;
-        return 0;
+        return 1;
     }
 
     scalarProduct(vector)
     {
         let scalarProduct = this.point.x * vector.point.x + this.point.y * vector.point.y;
+        if (Math.abs(scalarProduct) < Constants.eps)
+            return 0;
         if (scalarProduct < 0)
             return -1;
-        if (scalarProduct > 0)
-            return 1;
-        return 0;
+        return 1;
     }
 
     multiply(k)

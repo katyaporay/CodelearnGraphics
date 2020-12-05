@@ -164,7 +164,7 @@ class TweenOne extends Component {
    * QueueAnim 套在组件下面后导至子级变化。
    * <QueueAnim component={Menu} >
    *   <SubMenu key="a" title="导航">
-   *     <Item />
+   *     <SvgItem />
    *   </SubMenu>
    * </QueueAnim>
    * rc-Menu 里是以 isXXX 来判断是 rc-Menu 的子级;

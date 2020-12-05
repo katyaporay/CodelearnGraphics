@@ -1,15 +1,29 @@
 import Constants from "../../Models/Constants";
 import SvgDialog from "../SvgObjects/Heros/SvgDialog";
 import React from "react";
+import Character from "../PhysicalObjects/Character";
+import Npc from "../PhysicalObjects/Npc";
 
 export default class Dialog
 {
-    constructor(text) {
+    constructor(text, className) {
+        let legRy, rx, ry;
+        if (className === Character.name)
+        {
+            legRy = Constants.characterRy;
+            rx = Constants.characterRx;
+            ry = Constants.characterRy;
+        }
+        else if (className === Npc.name)
+        {
+            legRy = Constants.npcLegRy;
+            rx = ry = Constants.npcR;
+        }
         this.text = text;
-        this.localX = -(Constants.lineMaxLength - Constants.characterRx * 2) / 2;
+        this.localX = -(Constants.lineMaxLength - rx * 2) / 2;
         this.margin = 10;
         this.padding = 2;
-        this.localY = -(Constants.legRy + Constants.characterRy * 2 + this.margin);
+        this.localY = -(legRy + ry * 2 + this.margin);
         this.height = 0;
         this.anim = {
             duration: 1000,
@@ -34,7 +48,6 @@ export default class Dialog
     setHeight(height)
     {
         this.height = height;
-        //this.localY = -(Constants.legRy + Constants.characterRy * 2 + this.margin + height);
     }
 
     getReactComponent(x, y, scale)

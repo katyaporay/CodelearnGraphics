@@ -1,7 +1,9 @@
 export default class BoardObject {
+
     constructor()
     {
         this.bearingArea = null;
+        this.className = this.constructor.name;
     }
 
     hasOverlap(figure)

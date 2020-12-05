@@ -32,11 +32,11 @@ export default class SvgFunctions
             newPoint.x = Constants.fWidth / 2 + dx * this.getXScale(point.y);
         }*/
         const k = window.innerWidth / Constants.fWidth / 2;
-        const real = this.getProduct([[ x, y, z, 1 ]], Constants.matrix)[0];
+        const real = this.getProduct([[ x, y, z, 1 ]], Constants.matrix())[0];
         let newPoint = new Point( real[0] / real[3], real[1] / real[3]);
-        newPoint.x += Constants.shiftX;
         newPoint.x *= k;
         newPoint.y *= k;
+        newPoint.x += Constants.shiftX();
         return newPoint;
     }
 
@@ -116,9 +116,9 @@ export default class SvgFunctions
     static getFirstX(x)
     {
         const k = window.innerWidth / Constants.fWidth / 2;
+        x -= Constants.shiftX();
         x /= k;
-        x -= Constants.shiftX;
-        x += Constants.viewPoint.x;
+        x += Constants.viewPoint().x;
         return x;
     }
 }

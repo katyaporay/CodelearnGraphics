@@ -49,7 +49,7 @@ export default class Hole extends BoardObject
     doesOverlapView(figure)
     {
         const [p1, p2] = this.bearingArea.getVisibilityLimits();
-        const polygon = new Polygon([ Constants.viewPoint, p1, p2 ]);
+        const polygon = new Polygon([ Constants.viewPoint(), p1, p2 ]);
         return polygon.hasOverlap(figure) || this.bearingArea.hasOverlap(figure);
     }
 

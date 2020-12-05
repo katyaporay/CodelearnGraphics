@@ -47,7 +47,8 @@ export default class SvgDialog extends React.Component
                     {<Text x={this.props.x + this.props.padding}
                            y={this.props.y + this.props.padding + Constants.charHeight - this.state.height}
                            setHeight={(height) => this.setHeight(height)}
-                           width={this.props.width} height={`${this.state.height}em`}
+                           width={this.props.width - 2 * this.props.padding}
+                           height={`${this.state.height}em`}
                            aria-multiline={true} style={{fontSize: 10}}>
                         {this.props.text}</Text>}
                     {/*<switch>
