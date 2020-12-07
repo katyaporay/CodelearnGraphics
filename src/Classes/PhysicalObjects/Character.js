@@ -1,7 +1,7 @@
 import React from "react";
 import Point from "../GeometricalFigures/Point";
 import Constants from "../../Models/Constants";
-import SvgCharacter from "../SvgObjects/Heros/SvgCharacter";
+import SvgCharacter from "../SvgObjects/Heroes/3d/SvgCharacter";
 import {objectTypes} from "../../Models/Types";
 import BoardObject from "./BoardObject";
 import SvgFunctions from "../SvgObjects/SvgFunctions";
@@ -10,6 +10,7 @@ import SvgPolygon from "../SvgObjects/SvgPolygon";
 import Polygon from "../GeometricalFigures/Polygon";
 import Ellipse from "../GeometricalFigures/Ellipse";
 import Dialog from "../ObjectsToLink/Dialog";
+import SvgCharacter2d from "../SvgObjects/Heroes/2d/SvgCharacter2d";
 
 export default class Character extends BoardObject
 {
@@ -92,11 +93,21 @@ export default class Character extends BoardObject
     getReactComponent()
     {
         console.log("from getReactComponent: countSteps = " + this._countSteps);
-        return <g>
-            <SvgCharacter cx={this._center.x} cy={this._center.y} anim={this._anim}
-                          countSteps={this._countSteps} durationStep={this.durationStep}
-                          linkedObjects={this._linkedObjects}/>
-        </g>
+        if (Constants.mode === "3d") {
+            return <g>
+                <SvgCharacter cx={this._center.x} cy={this._center.y} anim={this._anim}
+                              countSteps={this._countSteps} durationStep={this.durationStep}
+                              linkedObjects={this._linkedObjects}/>
+            </g>
+        }
+        else
+        {
+            return <g>
+                <SvgCharacter2d cx={this._center.x} cy={this._center.y} anim={this._anim}
+                              countSteps={this._countSteps} durationStep={this.durationStep}
+                              linkedObjects={this._linkedObjects}/>
+            </g>
+        }
     }
 
     getProjection()

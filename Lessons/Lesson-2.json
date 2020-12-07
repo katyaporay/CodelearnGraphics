@@ -1,15 +1,15 @@
 {
-  "field":{"width":1000,"length":500},
+  "field":{"width":600,"length":500},
   "character":
     {"className":"Character","cx":500,"cy":250},
+  "chestsArea":
+    {"minX": 10,"minY": 10,"width": 100,"length": 200},
   "objects":[
     {"className":"Npc","cx":50,"cy":50},
     {"className":"Wall","minX":0,"minY":0,"maxX":10,"maxY":500,"height":10},
     {"className":"Wall","minX":10,"minY":0,"maxX":590,"maxY":10,"height":10},
     {"className":"Wall","minX":590,"minY":0,"maxX":600,"maxY":500,"height":10},
-    {"className":"Wall","minX":30,"minY":490,"maxX":590,"maxY":500,"height":10},
-    {"className":"Hole","cx":400,"cy":100,"r":40},
-    {"className":"Chest","type":"array","name": "myArray","minX":100,"minY":100,"width":50,"length":100,
-      "height":50,"maxCount":5,"array":[]}
+    {"className":"Wall","minX":10,"minY":490,"maxX":590,"maxY":500,"height":10},
+    {"className":"Hole","cx":400,"cy":100,"r":40}
   ]
 }

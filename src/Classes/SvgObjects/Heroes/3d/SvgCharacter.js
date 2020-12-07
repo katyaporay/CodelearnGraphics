@@ -1,12 +1,12 @@
 import React from "react";
 import TweenOne, {TweenOneGroup} from "rc-tween-one";
-import Animations from "../../../Models/Animations";
-import Constants from "../../../Models/Constants";
-import SvgFunctions from "../SvgFunctions";
-import Point from "../../GeometricalFigures/Point";
-import SvgPolygon from "../SvgPolygon";
+import Animations from "../../../../Models/Animations";
+import Constants from "../../../../Models/Constants";
+import SvgFunctions from "../../SvgFunctions";
+import Point from "../../../GeometricalFigures/Point";
+import SvgPolygon from "../../SvgPolygon";
 import Leg from "./Leg";
-import {Eye} from "./Eye";
+import {Eye} from "../Eye";
 
 export default class SvgCharacter extends React.Component {
     constructor(props) {
@@ -41,7 +41,7 @@ export default class SvgCharacter extends React.Component {
         const k = window.innerWidth / Constants.fWidth;
         const characterRx = Constants.characterRx, characterRy = Constants.characterRy,
             legRy = Constants.legRy;
-        console.log("SvgCharacter: scale = " + scale);
+        console.log("SvgCharacter2d: scale = " + scale);
         const innerPoint = new Point(cx - characterRx, cy);
         return (
             <g>

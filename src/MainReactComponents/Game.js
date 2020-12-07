@@ -83,6 +83,7 @@ export default class Game extends React.Component
 {
     constructor(props) {
         super(props);
+        Constants.mode = this.props.mode;
         const str2 = str;
         const initState2 = JSON.parse(str2);
         const initialState = {
@@ -141,7 +142,6 @@ export default class Game extends React.Component
     checkIsDying()
     {
         return this.checkDoesCollide(this.state.character.fallingArea.polygon, objectTypes.death);
-        return false;
     }
 
     getNewCharacter(animX, animY)
@@ -224,7 +224,7 @@ export default class Game extends React.Component
         });*/
         if (this.checkIsDying())
         {
-            character.setAnim(Animations.animFallDown, 0, 0);
+            character.setAnim(Animations.getAnimFallDown(), 0, 0);
             this.setState({
                 character: character,
             })
@@ -232,7 +232,7 @@ export default class Game extends React.Component
                 character: new Character(
                     this.state.character.center.x,
                     this.state.character.center.y,
-                    Animations.animFallDown,
+                    Animations.getAnimFallDown(),
                     0,
                     0,
                     this.state.character.linkedObjects,

@@ -2,7 +2,7 @@ import React from "react";
 import SvgFunctions from "../SvgFunctions";
 import Polygon from "../../GeometricalFigures/Polygon";
 import SvgPolygon from "../SvgPolygon";
-import SvgNpc from "../Heros/SvgNpc";
+import SvgNpc from "../Heroes/3d/SvgNpc";
 import Point from "../../GeometricalFigures/Point";
 import Text from "../../../Models/Text";
 import Constants from "../../../Models/Constants";

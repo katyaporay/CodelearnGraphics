@@ -1,5 +1,5 @@
 import Constants from "../../Models/Constants";
-import SvgDialog from "../SvgObjects/Heros/SvgDialog";
+import SvgDialog from "../SvgObjects/Heroes/SvgDialog";
 import React from "react";
 import Character from "../PhysicalObjects/Character";
 import Npc from "../PhysicalObjects/Npc";

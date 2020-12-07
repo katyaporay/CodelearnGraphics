@@ -56,7 +56,39 @@ export default class Animations {
         ];
     }
 
-    static animFallDown = {
+    static getAnimGo2d(durationStep, r)
+    {
+        const down1 = {
+            duration: Constants.durationStep / 4,
+            y: r / 2,
+            ease: "linear",
+        }
+        const up = {
+            duration: Constants.durationStep / 2,
+            y: -r / 2,
+            ease: "linear",
+        }
+        const down2 = {
+            duration: Constants.durationStep / 4,
+            y: 0,
+            ease: "linear",
+        }
+        return [down1, up, down2];
+    }
+
+    static getAnimFallDown()
+    {
+        if (Constants.mode === "3d")
+        {
+            return this.animFallDown3d;
+        }
+        else
+        {
+            return this.animFallDown2d;
+        }
+    }
+
+    static animFallDown3d = {
         type: "to",
         duration: Constants.durationFallDown,
         opacity: -1,
@@ -64,6 +96,17 @@ export default class Animations {
         y: 100,
         onComplete: null,
         ease: "linear",
+    }
+
+    static animFallDown2d = {
+        type: "to",
+        duration: Constants.durationFallDown,
+        opacity: -1,
+        x: 0,
+        y: 0,
+        onComplete: null,
+        ease: "linear",
+        scale: 0.1,
     }
 
     static crownAnim = {

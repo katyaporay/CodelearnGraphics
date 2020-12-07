@@ -2,12 +2,13 @@ import Point from "../GeometricalFigures/Point";
 import Constants from "../../Models/Constants";
 import {objectTypes} from "../../Models/Types";
 import Rectangle from "../GeometricalFigures/Rectangle";
-import SvgNpc from "../SvgObjects/Heros/SvgNpc";
+import SvgNpc from "../SvgObjects/Heroes/3d/SvgNpc";
 import React from "react";
 import SvgFunctions from "../SvgObjects/SvgFunctions";
 import Ellipse from "../GeometricalFigures/Ellipse";
 import Dialog from "../ObjectsToLink/Dialog";
 import BoardObject from "./BoardObject";
+import SvgNpc2d from "../SvgObjects/Heroes/2d/SvgNpc2d";
 
 export default class Npc extends BoardObject
 {
@@ -32,8 +33,15 @@ export default class Npc extends BoardObject
 
     getReactComponent()
     {
-        return <SvgNpc cx={this.center.x} cy={this.center.y} anim={this.anim}
-                       linkedObjects={this.linkedObjects}/>
+        if (Constants.mode === "3d") {
+            return <SvgNpc cx={this.center.x} cy={this.center.y} anim={this.anim}
+                           linkedObjects={this.linkedObjects}/>
+        }
+        else
+        {
+            return <SvgNpc2d cx={this.center.x} cy={this.center.y} anim={this.anim}
+                           linkedObjects={this.linkedObjects}/>
+        }
     }
 
 

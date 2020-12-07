@@ -2,7 +2,7 @@ import React from 'react';
 import logo from '../logo.svg';
 import '../App.css';
 import Crown from "../Classes/SvgObjects/SvgCrown";
-import Character from "../Classes/SvgObjects/Heros/SvgCharacter";
+import Character from "../Classes/SvgObjects/Heroes/3d/SvgCharacter";
 import Hole from "../Classes/SvgObjects/SvgHole";
 import Wall from "../Classes/SvgObjects/SvgWall";
 import ReactParallelogram from "../Classes/SvgObjects/SvgParallelogram";
@@ -63,6 +63,11 @@ function cmp(a, b)
     return b.getDist() - a.getDist();
 }
 
+function cmp2d(a, b)
+{
+    return a.height - b.height;
+}
+
 export default class Board extends React.Component{
     render() {
         const rectangle = new Rectangle(
@@ -87,7 +92,13 @@ export default class Board extends React.Component{
         }*/
 
         //objects.sort(cmp);
-        objects = (new SortObjects(objects)).getSortedObjects();
+        if (Constants.mode === "3d") {
+            objects = (new SortObjects(objects)).getSortedObjects();
+        }
+        else
+        {
+            objects.sort(cmp2d);
+        }
         let k = window.innerWidth / Constants.fWidth;
         return(
             <svg width={Constants.fWidth * k} height={Constants.height * k}>

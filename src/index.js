@@ -4,10 +4,8 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import Game from "./MainReactComponents/Game";
 
-const game = <Game/>;
-
 ReactDOM.render(
-    game,
+    <Game mode="3d"/>,
     document.getElementById('root')
 );
 

@@ -1,6 +1,6 @@
 import React from "react";
-import Animations from "../../../Models/Animations";
-import Constants from "../../../Models/Constants";
+import Animations from "../../../../Models/Animations";
+import Constants from "../../../../Models/Constants";
 import TweenOne from "rc-tween-one";
 
 export default class Leg extends React.Component

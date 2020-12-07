@@ -44,21 +44,33 @@ export default class Constants {
     {
         const k = window.innerWidth / Constants.fWidth / 2;
         const real = SvgFunctions.getProduct(
-            [[ Constants.fWidth, 0, Constants.fLength, 1 ]], Constants.matrix())[0];
+            [[ 0, 0, Constants.fLength, 1 ]], Constants.matrix())[0];
         let newPoint = new Point( real[0] / real[3], real[1] / real[3]);
         newPoint.x *= k;
         newPoint.y *= k;
-        return newPoint.x;
+        return -newPoint.x;
     }
 
     static eps = 1e-9;
+    static mode = "3d";
 
     static matrix() {
-        return [
-            [1, 0, 0, 0],
-            [0, -1, 0, 0],
-            [0, 0, 0, -1 / Constants.viewPoint().z],
-            [-Constants.viewPoint().x, Constants.viewPoint().y, 0, 1],
-        ]
+        if (this.mode === "3d") {
+            return [
+                [1, 0, 0, 0],
+                [0, -1, 0, 0],
+                [0, 0, 0, -1 / Constants.viewPoint().z],
+                [-Constants.viewPoint().x, Constants.viewPoint().y, 0, 1],
+            ]
+        }
+        else
+        {
+            return [
+                [1, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 1],
+            ]
+        }
     };
 }

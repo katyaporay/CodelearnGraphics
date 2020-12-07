@@ -73,9 +73,12 @@ export default class SvgFunctions
 
     static getScale(x, y, height)
     {
-        const p1 = this.getSvgPoint(x, y);
-        const p2 = this.getSvgPoint(x, y, height);
-        return (p1.y - p2.y) / height;
+        if (Constants.mode === "3d") {
+            const p1 = this.getSvgPoint(x, y);
+            const p2 = this.getSvgPoint(x, y, height);
+            return (p1.y - p2.y) / height;
+        }
+        return 1;
     }
 
     /*static getYScale(y)
