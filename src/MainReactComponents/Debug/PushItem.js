@@ -1,13 +1,18 @@
 import React from "react";
 
-export default class ChangeItem extends React.Component
+export default class PushItem extends React.Component
 {
     constructor(props) {
         super(props);
         this.state = {
-            index: 0,
+            num_chest: 0,
             value: '',
         };
+    }
+
+    handleChangeNumChest(event)
+    {
+        this.setState({num_chest: event.target.value});
     }
 
     handleChangeValue(event)
@@ -15,14 +20,9 @@ export default class ChangeItem extends React.Component
         this.setState({value: event.target.value});
     }
 
-    handleChangeIndex(index)
-    {
-        this.setState({index: index.target.value});
-    }
-
     handleSubmit(event)
     {
-        this.props.changeItem("first_chest", this.state.index, this.state.value);
+        this.props.pushItem(this.state.num_chest, this.state.value);
         event.preventDefault();
     }
 
@@ -32,20 +32,20 @@ export default class ChangeItem extends React.Component
                 <form onSubmit={(event) => this.handleSubmit(event)}>
                     <br/>
                     <label>
-                        Индекс изменяемого элемента:
-                        <input type="number" value={this.state.index}
-                               onChange={(index) =>
-                                   this.handleChangeIndex(index)}/>
+                        Номер сундука:
+                        <input type="number" value={this.state.num_chest}
+                               onChange={(event) =>
+                                   this.handleChangeNumChest(event)}/>
                     </label>
                     <br/>
                     <label>
-                        Новое значение элемента:
+                        Значение добавляемого элемента:
                         <input type="text" value={this.state.value}
                                onChange={(event) =>
                                    this.handleChangeValue(event)}/>
                     </label>
                     <br/>
-                    <input type="submit" value="Изменить"/>
+                    <input type="submit" value="Добваить элемент"/>
                 </form>
                 <br/>
             </div>

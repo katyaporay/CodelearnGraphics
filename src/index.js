@@ -5,7 +5,7 @@ import * as serviceWorker from './serviceWorker';
 import Game from "./MainReactComponents/Game";
 
 ReactDOM.render(
-    <Game mode="2d"/>,
+    <Game mode="3d"/>,
     document.getElementById('root')
 );
 

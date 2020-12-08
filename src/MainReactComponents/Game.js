@@ -16,13 +16,17 @@ import SvgDrawPlugin from "../src/plugin/SvgDrawPlugin";
 import Rectangle from "../Classes/GeometricalFigures/Rectangle";
 import SvgFunctions from "../Classes/SvgObjects/SvgFunctions";
 import Dialog from "../Classes/ObjectsToLink/Dialog";
-import GetMessage from "./GetMessage";
+import GetMessage from "./Debug/GetMessage";
 import Npc from "../Classes/PhysicalObjects/Npc";
 import Chest from "../Classes/PhysicalObjects/Chest/Chest";
-import ChangeItem from "./ChangeItem";
-import ReadLevel from "./ReadLevel";
+import ChangeItem from "./Debug/ChangeItem";
+import ReadLevel from "./Debug/ReadLevel";
 import BoardObject from "../Classes/PhysicalObjects/BoardObject";
-import {Buttons} from "./Buttons";
+import {Buttons} from "./Debug/Buttons";
+import ChestsArea from "../Classes/PhysicalObjects/Chest/ChestsArea";
+import PushItem from "./Debug/PushItem";
+import InsertItem from "./Debug/InsertItem";
+import RemoveItem from "./Debug/RemoveItem";
 
 TweenOne.plugins.push(SvgDrawPlugin);
 
@@ -74,6 +78,9 @@ function getSpecificObject(object)
             case Wall.name:
                 object = new Wall(object.minX, object.minY, object.maxX, object.maxY,
                     object.height);
+                break;
+            case ChestsArea.name:
+                object = new ChestsArea(object.minX, object.minY, object.maxX, object.maxY, object.height);
                 break;
             default:
         }
@@ -302,21 +309,92 @@ export default class Game extends React.Component
         });
     }
 
-    changeItem(name, index, value)
+    changeItem(num_chest, index, value)
     {
         let objects = this.state.objects;
         for (let i = 0; i < objects.length; i++)
         {
             const object = objects[i];
-            if (object.constructor.name !== Chest.name)
+            if (object.constructor.name !== ChestsArea.name)
                 continue;
-            if (object.name !== name)
-                continue;
-            object.changeItem(index, value);
+            object.changeInChest(num_chest, index, value);
         }
         this.setState({
             objects: objects,
         })
+    }
+
+    pushItem(num_chest, value)
+    {
+        let objects = this.state.objects;
+        for (let i = 0; i < objects.length; i++)
+        {
+            const object = objects[i];
+            if (object.constructor.name !== ChestsArea.name)
+                continue;
+            object.pushToChest(num_chest, value);
+        }
+        this.setState({
+            objects: objects,
+        })
+    }
+
+    insertItem(num_chest, index, value)
+    {
+        let objects = this.state.objects;
+        for (let i = 0; i < objects.length; i++)
+        {
+            const object = objects[i];
+            if (object.constructor.name !== ChestsArea.name)
+                continue;
+            object.insertToChest(num_chest, index, value);
+        }
+        this.setState({
+            objects: objects,
+        })
+    }
+
+    removeItem(num_chest, index)
+    {
+        let objects = this.state.objects;
+        for (let i = 0; i < objects.length; i++)
+        {
+            const object = objects[i];
+            if (object.constructor.name !== ChestsArea.name)
+                continue;
+            object.removeFromChest(num_chest, index);
+        }
+        this.setState({
+            objects: objects,
+        })
+    }
+
+    addChest()
+    {
+        let objects = this.state.objects;
+        for (let i = 0; i < objects.length; i++)
+        {
+            const object = objects[i];
+            if (object.constructor.name !== ChestsArea.name)
+                continue;
+            object.addChest();
+        }
+        this.setState({
+            objects: objects,
+        })
+    }
+
+    changeMode()
+    {
+        if (Constants.mode === "3d")
+        {
+            Constants.mode = "2d";
+        }
+        else
+        {
+            Constants.mode = "3d";
+        }
+        this.forceUpdate();
     }
 
     render() {
@@ -324,21 +402,34 @@ export default class Game extends React.Component
             <div>
                 <Board character={this.state.character}
                        objects={this.state.objects}/>
-                <div>
-                    <div style={{float: 'right', alignContent: 'center'}}>
-                        <Buttons moveUp={() => this.move(0, -Constants.lengthStep)}
-                                 moveDown={() => this.move(0, Constants.lengthStep)}
-                                 moveLeft={() => this.move(-Constants.lengthStep, 0)}
-                                 moveRight={() => this.move(Constants.lengthStep, 0)}/>
-                    </div>
-                    <div>
-                       <ReadLevel changeLevel={(object) => this.changeLevel(object)}/>
-                       <GetMessage getMessage={(message) => this.say(message)}/>
-                       <GetMessage getMessage={(message) => this.npcSay(message)}/>
-                    </div>
+                <div style={{float: 'right', alignContent: 'center'}}>
+                    <Buttons moveUp={() => this.move(0, -Constants.lengthStep)}
+                             moveDown={() => this.move(0, Constants.lengthStep)}
+                             moveLeft={() => this.move(-Constants.lengthStep, 0)}
+                             moveRight={() => this.move(Constants.lengthStep, 0)}/>
                 </div>
-                <ChangeItem changeItem={(name, index, value) =>
-                    this.changeItem(name, index, value)}/>
+                <div style={{float: 'left'}}>
+                    <ReadLevel changeLevel={(object) => this.changeLevel(object)}/>
+                </div>
+                <button onClick={() => this.changeMode()}>Изменить вид</button>
+                <GetMessage getMessage={(message) => this.say(message)}/>
+                <GetMessage getMessage={(message) => this.npcSay(message)}/>
+                <br/>
+                <button onClick={() => this.addChest()}>
+                    Добавить сундук
+                </button>
+
+                <div style={{float: 'right', margin: 50}}>
+                    <PushItem pushItem={(num_chest, value) =>
+                        this.pushItem(num_chest, value)}/>
+                    <RemoveItem removeItem={(num_chest, index) =>
+                        this.removeItem(num_chest, index)}/>
+                    <ChangeItem changeItem={(num_chest, index, value) =>
+                        this.changeItem(num_chest, index, value)}/>
+                    <InsertItem insertItem={(num_chest, index, value) =>
+                        this.insertItem(num_chest, index, value)}/>
+                </div>
+
                 <div>
                     {"cx = " + this.state.character._center.x}
                 </div>

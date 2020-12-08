@@ -10,6 +10,8 @@
     {"className":"Wall","minX":10,"minY":0,"maxX":590,"maxY":10,"height":10},
     {"className":"Wall","minX":590,"minY":0,"maxX":600,"maxY":500,"height":10},
     {"className":"Wall","minX":10,"minY":490,"maxX":590,"maxY":500,"height":10},
-    {"className":"Hole","cx":400,"cy":100,"r":40}
+    {"className":"Hole","cx":400,"cy":100,"r":40},
+    {"className":"ChestsArea","minX": 10,"minY": 10,"maxX": 100,"maxY": 400,
+      "height": 50}
   ]
 }

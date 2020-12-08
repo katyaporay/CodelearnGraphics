@@ -15,9 +15,8 @@ export default class SvgItem extends React.Component
         this.state = {
             height: 0,
             leftPadding: 2,
-            upPadding: 7,
+            upPadding: 2,
         }
-        this.fill = "#ffc229";
     }
 
     setHeight(height)
@@ -40,15 +39,15 @@ export default class SvgItem extends React.Component
     }
 
     getCap() {
-        const a = SvgFunctions.getSvgPoint(this.props.x, this.props.y, this.state.height);
+        const a = SvgFunctions.getSvgPoint(this.props.x, this.props.y, this.props.height);
         const b = SvgFunctions.getSvgPoint(this.props.x + this.props.width, this.props.y,
-            this.state.height);
+            this.props.height);
         const c = SvgFunctions.getSvgPoint(this.props.x + this.props.width,
-            this.props.y + this.props.length, this.state.height);
+            this.props.y + this.props.length, this.props.height);
         const d = SvgFunctions.getSvgPoint(this.props.x, this.props.y + this.props.length,
-            this.state.height);
+            this.props.height);
         const polygon = new Polygon([ a, b, c, d ]);
-        return <SvgPolygon polygon={polygon} fill={this.fill}/>
+        return <SvgPolygon polygon={polygon} fill={Constants.chestColor}/>
     }
 
     getLeftWall() {
@@ -63,11 +62,11 @@ export default class SvgItem extends React.Component
         const frontPolygon = this.getWall(2, 3);
         const minPoint = SvgFunctions.getSvgPoint(this.props.x,
             this.props.y + this.props.length);
-        minPoint.y -= this.state.height;
+        minPoint.y -= this.props.height;
         const scale = SvgFunctions.getScale(this.props.x, this.props.y + this.props.length,
-            this.state.height);
+            this.props.height);
         const originPoint = SvgFunctions.getSvgPoint(this.props.x,
-            this.props.y + this.props.length, this.state.height);
+            this.props.y + this.props.length, this.props.height);
         const transformOrigin = originPoint.x + "px " + originPoint.y + "px";
         return <g>
             {frontPolygon}
@@ -76,7 +75,7 @@ export default class SvgItem extends React.Component
                       y={minPoint.y + this.state.upPadding}
                       setHeight={(height) => this.setHeight(height)}
                       width={this.props.width - 2 * this.state.leftPadding}
-                      style={{fontSize: 10}}>
+                      style={{fontSize: 10}} height={this.props.height - this.state.upPadding * 2}>
                     {this.props.text}
                 </Text>
             </g>
@@ -88,11 +87,11 @@ export default class SvgItem extends React.Component
         const p1 = bearingArea.points[i], p2 = bearingArea.points[j];
         const polygon = new Polygon([
             SvgFunctions.getSvgPoint(p1.x, p1.y),
-            SvgFunctions.getSvgPoint(p1.x, p1.y, this.state.height),
-            SvgFunctions.getSvgPoint(p2.x, p2.y, this.state.height),
+            SvgFunctions.getSvgPoint(p1.x, p1.y, this.props.height),
+            SvgFunctions.getSvgPoint(p2.x, p2.y, this.props.height),
             SvgFunctions.getSvgPoint(p2.x, p2.y),
         ]);
-        return <SvgPolygon polygon={polygon} fill={this.fill}/>;
+        return <SvgPolygon polygon={polygon} fill={Constants.chestColor}/>;
     }
 
     getBearingArea()

@@ -81,4 +81,6 @@ export default class Constants {
                 Constants.height / Constants.fLength);
         }
     }
+
+    static chestColor = '#f2ce18';
 }

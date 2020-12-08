@@ -4,7 +4,7 @@ import Constants from "./Constants";
 export default class Text extends React.Component {
 
   static defaultProps = {
-    lineHeight: 1,
+    lineHeight: Constants.charHeight,
     capHeight: 0.71,
   };
 
@@ -31,12 +31,12 @@ export default class Text extends React.Component {
     const dy = capHeight;
     const { x, y } = props;
 
-    this.props.setHeight((this.state.lines.length + 1) * lineHeight * Constants.charHeight);
+    this.props.setHeight((this.state.lines.length + 1) * lineHeight);
 
     return (
       <text {...props} dy={`${dy}em`}>
         {this.state.lines.map((word, index) => (
-          <tspan x={x} y={y} dy={`${index * lineHeight}em`}>
+          <tspan x={x} y={y} dy={`${index * lineHeight}px`}>
             {word}
           </tspan>
         ))}
@@ -83,7 +83,7 @@ export default class Text extends React.Component {
   }
 
   calculateLines(wordsWithComputedWidth, spaceWidth, lineWidth) {
-    const wordsByLines = wordsWithComputedWidth.reduce((result, { word, width}) => {
+    let wordsByLines = wordsWithComputedWidth.reduce((result, { word, width}) => {
       const lastLine = result[result.length - 1] || { words: [], width: 0 };
 
       if (width > lineWidth)
@@ -109,6 +109,15 @@ export default class Text extends React.Component {
 
       return result;
     }, []);
+
+    if (this.props.hasOwnProperty('height')) {
+      const maxCountLines = Math.floor(this.props.height / this.props.lineHeight);
+      if (wordsByLines.length > maxCountLines) {
+        wordsByLines = wordsByLines.slice(0, maxCountLines);
+        const lastLineWords = wordsByLines[wordsByLines.length - 1].words;
+        lastLineWords[lastLineWords.length - 1] = '...';
+      }
+    }
 
     return wordsByLines.map(line => line.words.join(' '));
   }

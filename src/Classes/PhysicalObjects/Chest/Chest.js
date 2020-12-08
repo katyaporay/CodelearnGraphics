@@ -8,28 +8,29 @@ import BoardObject from "../BoardObject";
 
 export default class Chest extends BoardObject
 {
-    constructor(name, minX, minY, width, length, height, maxCount, array) {
+    constructor(name, minX, minY, maxX, maxY, height, array) {
         super();
         this.name = name;
         this.pointMin = new Point(minX, minY);
-        this.width = width;
-        this.length = length;
+        this.pointMax = new Point(maxX, maxY);
         this.height = height;
         this.oldArray = array;
         this.array = array;
-        this.maxCount = maxCount;
 
-        this.minSpace = 10;
-        this.itemWidth = (this.width - (maxCount + 1) * this.minSpace) / maxCount;
-        this.bearingArea = this.getBearingArea();
         this.objectType = objectTypes.barrier;
+    }
+
+    setPosition(minX, minY, maxX, maxY)
+    {
+        this.pointMin = new Point(minX, minY);
+        this.pointMax = new Point(maxX, maxY);
     }
 
     getBearingArea()
     {
         return new Rectangle(
             this.pointMin,
-            new Point(this.pointMin.x + this.width, this.pointMin.y + this.length)
+            this.pointMax
         );
     }
 
@@ -37,6 +38,24 @@ export default class Chest extends BoardObject
     {
         const cube = new Cube(this.getBearingArea(), this.height);
         return cube.getProjection();
+    }
+
+    pushItem(value)
+    {
+        this.oldArray = this.array.slice();
+        this.array.push(value);
+    }
+
+    insertItem(index, value)
+    {
+        this.oldArray = this.array.slice();
+        this.array.splice(index, 0, value);
+    }
+
+    removeItem(index)
+    {
+        this.oldArray = this.array.slice();
+        this.array.splice(index, 1);
     }
 
     changeItem(index, value)
@@ -49,10 +68,12 @@ export default class Chest extends BoardObject
     {
         return<g>
             <SvgChest x={this.pointMin.x} y={this.pointMin.y}
-                         width={this.width} length={this.length}
-                         itemWidth={this.itemWidth} height={this.height}
-                         oldArray={this.oldArray} array={this.array}
-                         bearingArea={this.bearingArea}/>
+                      width={this.pointMax.x - this.pointMin.x}
+                      length={this.pointMax.y - this.pointMin.y}
+                      height={this.height}
+                      oldArray={this.oldArray}
+                      array={this.array}
+                      bearingArea={this.bearingArea}/>
         </g>
     }
 }
