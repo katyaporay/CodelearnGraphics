@@ -5,38 +5,18 @@ export default class SvgFunctions
 {
     static getSvgPoint(x, z, y = 0)
     {
-        /*let newPoint = new Point(point.x, point.y);
-        newPoint.y /= Constants.divY;
-        newPoint.y /= (1 + Math.pow((point.y / Constants.fLength), 1/10));
-        newPoint.y += Constants.height / Constants.divY;
-        const dx = Math.abs(point.x - Constants.fWidth / 2);
-        if (point.x <= Constants.fWidth / 2)
-        {
-            newPoint.x = Constants.fWidth / 2 - newPoint.y / Constants.height * dx;
-        }
-        else
-        {
-            newPoint.x = Constants.fWidth / 2 + newPoint.y / Constants.height * dx;
-        }
-        return newPoint;*/
-        /*let newPoint = new Point(point.x, point.y);
-        newPoint.y *= this.getYScale(point.y);
-        newPoint.y += Constants.height - Constants.fLength * this.getYScale(Constants.fLength);
-        const dx = Math.abs(point.x - Constants.fWidth / 2);
-        if (point.x <= Constants.fWidth / 2)
-        {
-            newPoint.x = Constants.fWidth / 2 - dx * this.getXScale(point.y);
-        }
-        else
-        {
-            newPoint.x = Constants.fWidth / 2 + dx * this.getXScale(point.y);
-        }*/
-        const k = window.innerWidth / Constants.fWidth / 2;
+        let newPoint = this.getSvgPointWithoutShift(x, z, y);
+        newPoint.x += Constants.shiftX();
+        return newPoint;
+    }
+
+    static getSvgPointWithoutShift(x, z, y = 0)
+    {
+        const k = Constants.k();
         const real = this.getProduct([[ x, y, z, 1 ]], Constants.matrix())[0];
         let newPoint = new Point( real[0] / real[3], real[1] / real[3]);
         newPoint.x *= k;
         newPoint.y *= k;
-        newPoint.x += Constants.shiftX();
         return newPoint;
     }
 
@@ -78,7 +58,7 @@ export default class SvgFunctions
             const p2 = this.getSvgPoint(x, y, height);
             return (p1.y - p2.y) / height;
         }
-        return 1;
+        return Constants.k();
     }
 
     /*static getYScale(y)
@@ -118,7 +98,7 @@ export default class SvgFunctions
 
     static getFirstX(x)
     {
-        const k = window.innerWidth / Constants.fWidth / 2;
+        const k = Constants.k();
         x -= Constants.shiftX();
         x /= k;
         x += Constants.viewPoint().x;

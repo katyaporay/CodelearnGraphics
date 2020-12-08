@@ -38,7 +38,7 @@ export default class SvgCharacter extends React.Component {
         const transformOrigin = "" + cx + "px " + cy + "px";
         const scale = SvgFunctions.getScale(this.props.cx, this.props.cy,
             Constants.legRy + Constants.characterRy * 2);
-        const k = window.innerWidth / Constants.fWidth;
+        const k = document.documentElement.clientWidth / Constants.fWidth;
         const characterRx = Constants.characterRx, characterRy = Constants.characterRy,
             legRy = Constants.legRy;
         console.log("SvgCharacter2d: scale = " + scale);
@@ -79,7 +79,7 @@ export default class SvgCharacter extends React.Component {
                              isBackLeg={false}
                         />
                         {this.props.linkedObjects.map(object =>
-                            object.getReactComponent(innerPoint.x, innerPoint.y, scale))}
+                            object.getReactComponent(innerPoint.x, innerPoint.y))}
                     </g>
                 </TweenOne>
             </g>

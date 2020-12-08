@@ -1,10 +1,10 @@
-import Rectangle from "../GeometricalFigures/Rectangle";
-import Point from "../GeometricalFigures/Point";
-import Cube from "../GeometricalFigures/3D/Cube";
-import SvgChest from "../SvgObjects/Collections/SvgChest";
+import Rectangle from "../../GeometricalFigures/Rectangle";
+import Point from "../../GeometricalFigures/Point";
+import Cube from "../../GeometricalFigures/3D/Cube";
+import SvgChest from "../../SvgObjects/Collections/SvgChest";
 import React from "react";
-import {objectTypes} from "../../Models/Types";
-import BoardObject from "./BoardObject";
+import {objectTypes} from "../../../Models/Types";
+import BoardObject from "../BoardObject";
 
 export default class Chest extends BoardObject
 {

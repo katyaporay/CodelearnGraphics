@@ -18,10 +18,11 @@ import SvgFunctions from "../Classes/SvgObjects/SvgFunctions";
 import Dialog from "../Classes/ObjectsToLink/Dialog";
 import GetMessage from "./GetMessage";
 import Npc from "../Classes/PhysicalObjects/Npc";
-import Chest from "../Classes/PhysicalObjects/Chest";
+import Chest from "../Classes/PhysicalObjects/Chest/Chest";
 import ChangeItem from "./ChangeItem";
 import ReadLevel from "./ReadLevel";
 import BoardObject from "../Classes/PhysicalObjects/BoardObject";
+import {Buttons} from "./Buttons";
 
 TweenOne.plugins.push(SvgDrawPlugin);
 
@@ -94,9 +95,9 @@ export default class Game extends React.Component
         this.state = initialState;
 
         let that = this;
-        let oldWidth = window.innerWidth;
+        let oldWidth = document.documentElement.clientWidth;
         window.onresize = function () {
-            const newWidth = window.innerWidth;
+            const newWidth = document.documentElement.clientWidth;
             if (newWidth !== oldWidth) {
                 that.forceUpdate();
                 oldWidth = newWidth;
@@ -323,9 +324,19 @@ export default class Game extends React.Component
             <div>
                 <Board character={this.state.character}
                        objects={this.state.objects}/>
-                <ReadLevel changeLevel={(object) => this.changeLevel(object)}/>
-                <GetMessage getMessage={(message) => this.say(message)}/>
-                <GetMessage getMessage={(message) => this.npcSay(message)}/>
+                <div>
+                    <div style={{float: 'right', alignContent: 'center'}}>
+                        <Buttons moveUp={() => this.move(0, -Constants.lengthStep)}
+                                 moveDown={() => this.move(0, Constants.lengthStep)}
+                                 moveLeft={() => this.move(-Constants.lengthStep, 0)}
+                                 moveRight={() => this.move(Constants.lengthStep, 0)}/>
+                    </div>
+                    <div>
+                       <ReadLevel changeLevel={(object) => this.changeLevel(object)}/>
+                       <GetMessage getMessage={(message) => this.say(message)}/>
+                       <GetMessage getMessage={(message) => this.npcSay(message)}/>
+                    </div>
+                </div>
                 <ChangeItem changeItem={(name, index, value) =>
                     this.changeItem(name, index, value)}/>
                 <div>

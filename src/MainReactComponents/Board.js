@@ -2,7 +2,7 @@ import React from 'react';
 import logo from '../logo.svg';
 import '../App.css';
 import Crown from "../Classes/SvgObjects/SvgCrown";
-import Character from "../Classes/SvgObjects/Heroes/3d/SvgCharacter";
+import Character from "../Classes/PhysicalObjects/Character";
 import Hole from "../Classes/SvgObjects/SvgHole";
 import Wall from "../Classes/SvgObjects/SvgWall";
 import ReactParallelogram from "../Classes/SvgObjects/SvgParallelogram";
@@ -65,6 +65,15 @@ function cmp(a, b)
 
 function cmp2d(a, b)
 {
+    console.log(a.constructor.name, a.constructor.name === Character.name, Character.name);
+    if (a.constructor.name === Character.name)
+    {
+        return (b.height === 0 ? 1 : -1);
+    }
+    if (b.constructor.name === Character.name)
+    {
+        return (a.height === 0 ? -1 : 1);
+    }
     return a.height - b.height;
 }
 
@@ -99,11 +108,10 @@ export default class Board extends React.Component{
         {
             objects.sort(cmp2d);
         }
-        let k = window.innerWidth / Constants.fWidth;
         return(
-            <svg width={Constants.fWidth * k} height={Constants.height * k}>
-                <rect x={0} y={0} width={Constants.fWidth * k}
-                      height={Constants.height * k}
+            <svg width={document.documentElement.clientWidth} height={Constants.height}>
+                <rect x={0} y={0} width={document.documentElement.clientWidth}
+                      height={Constants.height}
                       fill="#ffffff" stroke="#000000"/>
                       {rectangle.polygon.getReactComponent()}
                 {objects.map(object => (

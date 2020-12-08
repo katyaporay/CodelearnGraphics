@@ -4,7 +4,7 @@ import React from "react";
 export function Eye(props)
 {
     let whiteX, blackX;
-    const k = window.innerWidth / Constants.fWidth;
+    const k = document.documentElement.clientWidth / Constants.fWidth;
     const dx = Constants.eyeRx;
     if (props.isLeft)
     {

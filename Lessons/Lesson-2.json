@@ -3,7 +3,7 @@
   "character":
     {"className":"Character","cx":500,"cy":250},
   "chestsArea":
-    {"minX": 10,"minY": 10,"width": 100,"length": 200},
+    {"minX": 10,"minY": 10,"width": 100,"length": 200, "height":  50},
   "objects":[
     {"className":"Npc","cx":50,"cy":50},
     {"className":"Wall","minX":0,"minY":0,"maxX":10,"maxY":500,"height":10},

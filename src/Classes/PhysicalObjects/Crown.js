@@ -70,7 +70,7 @@ class Crown extends BoardObject
 
     getTriangle(i, cx, cy, rx, ry)
     {
-        const k = window.innerWidth / Constants.fWidth;
+        const k = document.documentElement.clientWidth / Constants.fWidth;
         const count = Constants.crownCount, width = rx / count;
         const up = k * Constants.crownUp;
         let up1 = i;

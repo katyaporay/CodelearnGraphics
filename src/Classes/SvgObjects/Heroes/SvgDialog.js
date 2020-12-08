@@ -44,21 +44,21 @@ export default class SvgDialog extends React.Component
                     <rect x={this.props.x} y={this.props.y - this.state.height}
                           height={this.state.height} width={this.props.width}
                           fill="#ffffff" strokeWidth="1" stroke="#000000" rx="5" ry="5"/>
-                    {/*<Text x={this.props.x + this.props.padding}
+                    {<Text x={this.props.x + this.props.padding}
                            y={this.props.y + this.props.padding + Constants.charHeight - this.state.height}
                            setHeight={(height) => this.setHeight(height)}
                            width={this.props.width - 2 * this.props.padding}
                            height={`${this.state.height}em`}
                            aria-multiline={true} style={{fontSize: 10}}>
-                        {this.props.text}</Text>*/}
-                    <text x={this.props.x + this.props.padding}
+                        {this.props.text}</Text>}
+                    {/*<text x={this.props.x + this.props.padding}
                           y={this.props.y + this.props.padding}
                           style={{
                               font: "24px sans-serif",
                               inlineSize: "100px",
                           }}>
                         {this.props.text}
-                    </text>
+                    </text>*/}
                 </g>
             </TweenOne>
         </g>

@@ -14,13 +14,13 @@ export default class SvgCrown extends React.Component {
 
     height()
     {
-        const k = window.innerWidth / Constants.fWidth;
+        const k = document.documentElement.clientWidth / Constants.fWidth;
         return Constants.crownHeight * k;
     }
 
     up()
     {
-        const k = window.innerWidth / Constants.fWidth;
+        const k = document.documentElement.clientWidth / Constants.fWidth;
         return Constants.crownUp * k;
     }
 

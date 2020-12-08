@@ -35,20 +35,16 @@ export default class Constants {
     static fWidth = 600;
     static fLength = 500;
     static range = 1000;
-    static height = 200;
+    static height = 400;
     static viewPoint()
     {
         return new Point3D(this.fWidth / 2, 200, 1200);
     }
     static shiftX()
     {
-        const k = window.innerWidth / Constants.fWidth / 2;
-        const real = SvgFunctions.getProduct(
-            [[ 0, 0, Constants.fLength, 1 ]], Constants.matrix())[0];
-        let newPoint = new Point( real[0] / real[3], real[1] / real[3]);
-        newPoint.x *= k;
-        newPoint.y *= k;
-        return -newPoint.x;
+        let leftPoint = SvgFunctions.getSvgPointWithoutShift(0, Constants.fLength);
+        let rightPoint = SvgFunctions.getSvgPointWithoutShift(Constants.fWidth, Constants.fLength);
+        return -(leftPoint.x + rightPoint.x) / 2 + document.documentElement.clientWidth / 2;
     }
 
     static eps = 1e-9;
@@ -73,4 +69,16 @@ export default class Constants {
             ]
         }
     };
+
+    static k() {
+        if (Constants.mode === "3d")
+        {
+            return document.documentElement.clientWidth / Constants.fWidth / 2;
+        }
+        else
+        {
+            return Math.min(document.documentElement.clientWidth / Constants.fWidth,
+                Constants.height / Constants.fLength);
+        }
+    }
 }

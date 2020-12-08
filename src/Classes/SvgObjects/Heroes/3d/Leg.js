@@ -62,7 +62,7 @@ export default class Leg extends React.Component
                 x += 5;
             }
         }
-        const k = window.innerWidth / Constants.fWidth;
+        const k = document.documentElement.clientWidth / Constants.fWidth;
         const legRy = this.props.ry, legRx = this.props.rx;
         return (
             <g>

@@ -86,7 +86,14 @@ export default class Text extends React.Component {
     const wordsByLines = wordsWithComputedWidth.reduce((result, { word, width}) => {
       const lastLine = result[result.length - 1] || { words: [], width: 0 };
 
-      if (lastLine.words.length === 0) {
+      if (width > lineWidth)
+      {
+        this.calculateWord(lastLine.width, word, lineWidth).map(part => {
+          const newLine = { words: [part.text], width: part.width};
+          result.push(newLine);
+        });
+      }
+      else if (lastLine.words.length === 0) {
         // First word on line
         const newLine = { words: [word], width };
         result.push(newLine);
@@ -104,5 +111,56 @@ export default class Text extends React.Component {
     }, []);
 
     return wordsByLines.map(line => line.words.join(' '));
+  }
+
+  calculateWord(startWidth, word, lineWidth)
+  {
+    const lettersWithComputedWidth = this.calculateLettersWidths(word);
+    const lettersByLines = lettersWithComputedWidth.reduce((result, { letter, width}) => {
+      const lastLine = result[result.length - 1] || { letters: [], width: startWidth };
+
+      if (lastLine.letters.length === 0) {
+        // First letter on line
+        const newLine = { letters: [letter], width };
+        result.push(newLine);
+      } else if (lastLine.width + width < lineWidth) {
+        // Letter can be added to an existing line
+        lastLine.letters.push(letter);
+        lastLine.width += width;
+        return result;
+      } else {
+        // Letter too long to fit on existing line
+        const newLine = { letters: [letter], width };
+        result.push(newLine);
+      }
+
+      return result;
+    }, []);
+
+    return lettersByLines.map(line =>
+    {return {text: line.letters.join(''), width: line.width}});
+  }
+
+  calculateLettersWidths(word)
+  {
+    let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    Object.assign(text.style, this.props.style);
+    svg.appendChild(text);
+    document.body.appendChild(svg);
+
+    let lettersWithComputedWidth = [];
+    for (let i = 0; i < word.length; i++)
+    {
+      const letter = word[i];
+      text.textContent = letter;
+      lettersWithComputedWidth.push({ letter, width: text.getComputedTextLength() });
+    }
+
+    text.textContent = '\u00A0'; // Unicode space
+
+    document.body.removeChild(svg);
+
+    return lettersWithComputedWidth;
   }
 }

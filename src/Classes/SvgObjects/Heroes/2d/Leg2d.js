@@ -41,7 +41,7 @@ export default class Leg2d extends React.Component
             }
         }
         let x = this.props.x, y = this.props.y;
-        const k = window.innerWidth / Constants.fWidth;
+        const k = document.documentElement.clientWidth / Constants.fWidth;
         const legRy = this.props.ry, legRx = this.props.rx;
         return (
             <g>
