@@ -42,4 +42,10 @@ export default class Wall extends BoardObject
         const cube = new Cube(this.bearingArea, this.height);
         return cube.getProjection();
     }
+
+    clone()
+    {
+        return new Wall(this.bearingArea.pointMin.x, this.bearingArea.pointMin.y,
+            this.bearingArea.pointMax.x, this.bearingArea.pointMax.y, this.height);
+    }
 }

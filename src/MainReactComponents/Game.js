@@ -27,6 +27,8 @@ import ChestsArea from "../Classes/PhysicalObjects/Chest/ChestsArea";
 import PushItem from "./Debug/PushItem";
 import InsertItem from "./Debug/InsertItem";
 import RemoveItem from "./Debug/RemoveItem";
+import FiguresArray from "../Classes/GeometricalFigures/FiguresArray";
+import Circle from "../Classes/GeometricalFigures/Circle";
 
 TweenOne.plugins.push(SvgDrawPlugin);
 
@@ -111,13 +113,8 @@ export default class Game extends React.Component
             }
         };
     }
-
-    set initialState(initialState)
-    {
-        this._initialState = initialState;
-    }
-
-    checkDoesCollide(polygon, objectTypeToCheck)
+    
+    checkDoesCollide(figure, objectTypeToCheck)
     {
         console.log("checkDoesCollide");
         for (let i = 0; i < this.state.objects.length; i++)
@@ -125,7 +122,7 @@ export default class Game extends React.Component
             let object = this.state.objects[i];
             if (!object.hasOwnProperty('objectType')) continue;
             if (object.objectType !== objectTypeToCheck) continue;
-            if (object.hasOverlap(polygon)) return true;
+            if (figure.hasOverlap(object.bearingArea)) return true;
             console.log("not overlap");
         }
         return false;
@@ -133,8 +130,32 @@ export default class Game extends React.Component
 
     checkCanGo(animX, animY)
     {
-        const rectangle = this.state.character.bearingArea;
-        let minX = Math.min(rectangle.pointMin.x, rectangle.pointMin.x + animX),
+        const circle = this.state.character.bearingArea;
+        let polygon;
+        if (animX === 0)
+        {
+            polygon = new Polygon([
+                new Point(circle.center.x - Constants.characterRx, circle.center.y),
+                new Point(circle.center.x + Constants.characterRx, circle.center.y),
+                new Point(circle.center.x + Constants.characterRx, circle.center.y + animY),
+                new Point(circle.center.x - Constants.characterRx, circle.center.y + animY),
+            ]);
+        }
+        else if (animY === 0)
+        {
+            polygon = new Polygon([
+                new Point(circle.center.x, circle.center.y - Constants.characterRx),
+                new Point(circle.center.x, circle.center.y + Constants.characterRx),
+                new Point(circle.center.x + animX, circle.center.y + Constants.characterRx),
+                new Point(circle.center.x + animX, circle.center.y - Constants.characterRx),
+            ]);
+        }
+        const figuresArray = new FiguresArray([
+            circle,
+            polygon,
+            new Circle(circle.center.x + animX, circle.center.y + animY, circle.r),
+        ])
+        /*let minX = Math.min(circle.center.x -, rectangle.pointMin.x + animX),
             minY = Math.min(rectangle.pointMin.y, rectangle.pointMin.y + animY),
             maxX = Math.max(rectangle.pointMax.x, rectangle.pointMax.x + animX),
             maxY = Math.max(rectangle.pointMax.y, rectangle.pointMax.y + animY);
@@ -143,13 +164,13 @@ export default class Game extends React.Component
             new Point(minX, maxY),
             new Point(maxX, maxY),
             new Point(maxX, minY),
-        ]);
-        return !this.checkDoesCollide(polygon, objectTypes.barrier);
+        ]);*/
+        return !this.checkDoesCollide(figuresArray, objectTypes.barrier);
     }
 
     checkIsDying()
     {
-        return this.checkDoesCollide(this.state.character.fallingArea.polygon, objectTypes.death);
+        return this.checkDoesCollide(this.state.character.fallingArea, objectTypes.death);
     }
 
     getNewCharacter(animX, animY)
@@ -410,8 +431,9 @@ export default class Game extends React.Component
                 </div>
                 <div style={{float: 'left'}}>
                     <ReadLevel changeLevel={(object) => this.changeLevel(object)}/>
+                    <button onClick={() => this.changeMode()}>Изменить вид</button>
                 </div>
-                <button onClick={() => this.changeMode()}>Изменить вид</button>
+                <button onClick={() => this.restartGame()}>Перезапустить игру</button>
                 <GetMessage getMessage={(message) => this.say(message)}/>
                 <GetMessage getMessage={(message) => this.npcSay(message)}/>
                 <br/>
@@ -467,9 +489,23 @@ export default class Game extends React.Component
         });
     }
 
+    cloneInitialState()
+    {
+        const clonedInitialsState = {};
+        clonedInitialsState.field = this.initialState.field;
+        clonedInitialsState.character = this.initialState.character.clone();
+        clonedInitialsState.objects = [];
+        for(let i = 0; i < this.initialState.objects.length; i++) {
+            const object = this.initialState.objects[i];
+            clonedInitialsState.objects.push(object.clone());
+        }
+        return clonedInitialsState;
+    }
+
     restartGame()
     {
-        this.setState(this._initialState);
+        this.setState(this.cloneInitialState());
+        this.forceUpdate();
     }
 
     getInitialState(json)

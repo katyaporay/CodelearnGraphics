@@ -45,7 +45,7 @@ export default class SvgDialog extends React.Component
                           height={this.state.height} width={this.props.width}
                           fill="#ffffff" strokeWidth="1" stroke="#000000" rx="5" ry="5"/>
                     {<Text x={this.props.x + this.props.padding}
-                           y={this.props.y + this.props.padding + Constants.charHeight - this.state.height}
+                           y={this.props.y + this.props.padding - this.state.height}
                            setHeight={(height) => this.setHeight(height)}
                            width={this.props.width - 2 * this.props.padding}
                            height={`${this.state.height}em`}

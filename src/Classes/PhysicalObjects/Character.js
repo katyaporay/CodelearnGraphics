@@ -11,6 +11,7 @@ import Polygon from "../GeometricalFigures/Polygon";
 import Ellipse from "../GeometricalFigures/Ellipse";
 import Dialog from "../ObjectsToLink/Dialog";
 import SvgCharacter2d from "../SvgObjects/Heroes/2d/SvgCharacter2d";
+import Circle from "../GeometricalFigures/Circle";
 
 export default class Character extends BoardObject
 {
@@ -59,20 +60,22 @@ export default class Character extends BoardObject
 
     getFallingArea()
     {
-        const pointMin = new Point(this._center.x - Constants.legRx,
+        /*const pointMin = new Point(this._center.x - Constants.legRx,
                 this._center.y - 3 * Constants.legWidth);
         const pointMax = new Point(this._center.x + Constants.legRx,
                 this._center.y + Constants.legWidth);
-        return new Rectangle(pointMin, pointMax);
+        return new Rectangle(pointMin, pointMax);*/
+        return new Circle(this._center.x, this._center.y, Constants.legWidth);
     }
 
     getBearingArea()
     {
-        const pointMin = new Point(this._center.x - Constants.characterRx,
+        /*const pointMin = new Point(this._center.x - Constants.characterRx,
                 this._center.y - Constants.characterRx);
         const pointMax = new Point(this._center.x + Constants.characterRx,
                 this._center.y + Constants.characterRx);
-        return new Rectangle(pointMin, pointMax);
+        return new Rectangle(pointMin, pointMax);*/
+        return new Circle(this._center.x, this._center.y, Constants.characterRx);
     }
 
     hasOverlap(object)
@@ -82,12 +85,12 @@ export default class Character extends BoardObject
 
     doesOverlapView(figure)
     {
-        return this.bearingArea.polygon.getOverviewFigure().hasOverlap(figure);
+        return this.bearingArea.getOverviewFigure().hasOverlap(figure);
     }
 
     getDist()
     {
-        return this.bearingArea.polygon.getMinDist();
+        return this.bearingArea.getMinDist();
     }
 
     getReactComponent()
@@ -120,5 +123,10 @@ export default class Character extends BoardObject
         const leg = new Ellipse(bottomPoint.x, bottomPoint.y - Constants.legRy * scale,
             Constants.legRx * scale, Constants.legRy * scale);
         return [body, leg];
+    }
+
+    clone()
+    {
+        return new Character(this._center.x, this._center.y);
     }
 }

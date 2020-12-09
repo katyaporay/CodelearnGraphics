@@ -109,9 +109,9 @@ export default class Board extends React.Component{
             objects.sort(cmp2d);
         }
         return(
-            <svg width={document.documentElement.clientWidth} height={Constants.height}>
+            <svg width={document.documentElement.clientWidth} height={Constants.getHeight()}>
                 <rect x={0} y={0} width={document.documentElement.clientWidth}
-                      height={Constants.height}
+                      height={Constants.getHeight()}
                       fill="#ffffff" stroke="#000000"/>
                       {rectangle.polygon.getReactComponent()}
                 {objects.map(object => (

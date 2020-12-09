@@ -3,6 +3,8 @@ import Segment from "../Classes/GeometricalFigures/Segment";
 import Constants from "./Constants";
 import Point from "../Classes/GeometricalFigures/Point";
 import SvgFunctions from "../Classes/SvgObjects/SvgFunctions";
+import Character from "../Classes/PhysicalObjects/Character";
+import Wall from "../Classes/PhysicalObjects/Wall";
 
 export default class SortObjects
 {
@@ -97,6 +99,11 @@ export default class SortObjects
 
     static getIntersection(object1, object2)
     {
+        if (object1.constructor.name === Character.name &&
+            object2.constructor.name === Wall.name)
+        {
+            object1 = object1;
+        }
         const figures1 = object1.getProjection(), figures2 = object2.getProjection();
         for (let i = 0; i < figures1.length; i++)
         {

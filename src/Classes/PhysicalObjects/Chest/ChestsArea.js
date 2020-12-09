@@ -103,4 +103,10 @@ export default class ChestsArea extends BoardObject {
             {this.chests.map(chest => chest.getReactComponent())}
         </g>
     }
+
+    clone()
+    {
+        return new ChestsArea(this.pointMin.x, this.pointMin.y, this.pointMax.x,
+            this.pointMax.y, this.height);
+    }
 }

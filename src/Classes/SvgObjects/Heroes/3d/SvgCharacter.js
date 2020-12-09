@@ -45,7 +45,8 @@ export default class SvgCharacter extends React.Component {
         const innerPoint = new Point(cx - characterRx, cy);
         return (
             <g>
-                <TweenOne component="g" animation={this.props.anim}
+                <TweenOne component="g" animation={this.props.anim != null ? this.props.anim :
+                    {duration: 0, scale: 1, opacity: 1, x: 0, y: 0}}
                           style={{transformOrigin: transformOrigin}}>
                     <g style={{transformOrigin: transformOrigin}}
                        transform={"scale(" + scale + ")"}>

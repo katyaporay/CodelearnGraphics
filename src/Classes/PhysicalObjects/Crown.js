@@ -1,4 +1,4 @@
-import Parallelogram from "../GeometricalFigures/Parallelogram";
+/*import Parallelogram from "../GeometricalFigures/Parallelogram";
 import Point from "../GeometricalFigures/Point";
 import Constants from "../../Models/Constants";
 import BoardObject from "./BoardObject";
@@ -100,4 +100,4 @@ class Crown extends BoardObject
         }
         return points;
     }
-}
+}*/

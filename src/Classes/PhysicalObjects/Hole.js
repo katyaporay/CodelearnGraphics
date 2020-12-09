@@ -74,4 +74,9 @@ export default class Hole extends BoardObject
         const ellipse = new Ellipse(centerPoint.x, centerPoint.y, rx, ry);
         return [ellipse];
     }
+
+    clone()
+    {
+        return new Hole(this.state.cx, this.state.cy, this.state.r);
+    }
 }

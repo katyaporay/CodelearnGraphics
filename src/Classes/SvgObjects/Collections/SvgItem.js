@@ -7,6 +7,8 @@ import Point from "../../GeometricalFigures/Point";
 import Text from "../../../Models/Text";
 import Constants from "../../../Models/Constants";
 import TweenOne from "../../../src/TweenOne";
+import Rectangle from "../../GeometricalFigures/Rectangle";
+import Cube from "../../GeometricalFigures/3D/Cube";
 
 export default class SvgItem extends React.Component
 {
@@ -28,14 +30,40 @@ export default class SvgItem extends React.Component
     }
 
     render() {
+        const cube = new Cube(this.getBearingArea(), this.props.height)
         return <TweenOne anim={this.props.anim} component="g">
             <g>
-                {this.getLeftWall()}
-                {this.getRightWall()}
-                {this.getCap()}
-                {this.getFrontWall()}
+                {cube.getReactComponent(Constants.chestColor)}
+                {this.getText()}
             </g>
         </TweenOne>
+    }
+
+    getText()
+    {
+        let minPoint, maxPoint;
+        if (Constants.mode === "3d")
+        {
+            minPoint = SvgFunctions.getSvgPoint(this.props.x,
+                this.props.y + this.props.length, this.props.height);
+            maxPoint = SvgFunctions.getSvgPoint(this.props.x + this.props.width,
+                this.props.y + this.props.length);
+        }
+        else
+        {
+            minPoint = SvgFunctions.getSvgPoint(this.props.x, this.props.y);
+            maxPoint = SvgFunctions.getSvgPoint(this.props.x + this.props.width,
+                this.props.y + this.props.length);
+        }
+        const width = maxPoint.x - minPoint.x;
+        const height = maxPoint.y - minPoint.y;
+        return <Text x={minPoint.x + this.state.leftPadding}
+                      y={minPoint.y + this.state.upPadding}
+                      setHeight={(height) => this.setHeight(height)}
+                      width={width - 2 * this.state.leftPadding}
+                      style={{fontSize: 10}} height={height - this.state.upPadding * 2}>
+                    {this.props.text}
+                </Text>
     }
 
     getCap() {
@@ -96,10 +124,8 @@ export default class SvgItem extends React.Component
 
     getBearingArea()
     {
-        const a = new Point(this.props.x, this.props.y);
-        const b = new Point(this.props.x + this.props.width, this.props.y);
-        const c = new Point(this.props.x + this.props.width, this.props.y + this.props.length);
-        const d = new Point(this.props.x, this.props.y + this.props.length);
-        return new Polygon([ a, b, c, d ]);
+        const pointMin = new Point(this.props.x, this.props.y);
+        const pointMax = new Point(this.props.x + this.props.width, this.props.y + this.props.length);
+        return new Rectangle(pointMin, pointMax);
     }
 }

@@ -51,10 +51,10 @@ export default class Circle
 
     hasOverlapWithCircle(circle)
     {
-        const dx = circle.cx - this.constructor.x, dy = circle.cy - this.center.y;
+        const dx = circle.center.x - this.center.x, dy = circle.center.y - this.center.y;
         const dd = dx * dx + dy * dy;
         const rr = (this.r + circle.r) * (this.r + circle.r);
-        return (dd <= rr);
+        return (dd - rr < Constants.eps);
     }
 
     hasOverlapWithSegment(segment)
@@ -66,16 +66,17 @@ export default class Circle
         const b = 2 * ((x2 - x1) * (x1 - cx) + (y2 - y1) * (y1 - cy));
         const c = cx * cx + cy * cy + x1 * x1 + y1 * y1 - 2 * (cx * x1 + cy * y1) - r * r;
 
-        if (-b < 0)
-            return (c < 0);
+        if (-b < Constants.eps)
+            return (c < Constants.eps);
         if (-b < (2 * a))
-            return (4 * a * c - b * b < 0)
-        return (a + b + c < 0);
+            return (4 * a * c - b * b < Constants.eps)
+        return (a + b + c < Constants.eps);
     }
 
     getIntersectionsWithLine(line)
     {
-        if (Math.abs(this.center.x * line.a + this.center.y * line.b + line.c) < Constants.eps)
+        if (Math.abs(this.center.x * line.a + this.center.y * line.b + line.c) < Constants.eps &&
+            (line.a * line.a + line.b * line.b) > Constants.eps)
         {
             const one = this.r * this.r / (line.a * line.a + line.b * line.b);
             const p1 = new Point(this.center.x + one * line.b, this.center.y - one * line.a);
@@ -85,15 +86,24 @@ export default class Circle
         const line2 = this.center.getPerpendicularLine(line);
         const lineIntersection = line.getIntersection(line2);
         const d = this.center.getDistToLine(line);
+        if (this.r < d)
+        {
+            return null;
+        }
         const r = Math.sqrt(this.r * this.r - d * d);
         const circle = new Circle(lineIntersection.x, lineIntersection.y, r);
-        return this.getIntersectionWithCircle(circle);
+        return this.getIntersectionsWithCircle(circle);
     }
 
     getIntersectionWithSegment(segment)
     {
         const line = segment.getLine();
-        const [p1, p2] = this.getIntersectionsWithLine(line);
+        const pp = this.getIntersectionsWithLine(line);
+        if (pp == null)
+        {
+            return null;
+        }
+        const [p1, p2] = pp;
         if (p1.getDistToSegment(segment) < Constants.eps)
             return p1;
         if (p2.getDistToSegment(segment) < Constants.eps)
@@ -120,8 +130,9 @@ export default class Circle
         {
             const j = (i + 1) % polygon.points.length;
             const segment = new Segment(polygon.points[i], polygon.points[j]);
-            if (this.hasOverlapWithSegment(segment))
+            if (this.hasOverlapWithSegment(segment)) {
                 return this.getIntersectionWithSegment(segment);
+            }
         }
         return null;
     }
@@ -154,6 +165,12 @@ export default class Circle
     getIntersectionWithCircle(circle)
     {
         if (this.hasOverlapWithCircle(circle)) return null;
+        return this.getIntersectionsWithCircle(circle)[0];
+    }
+
+    getIntersectionsWithCircle(circle)
+    {
+        if (!this.hasOverlapWithCircle(circle)) return null;
         const d = this.center.getDist(circle.center);
         const a = (this.r * this.r - circle.r * circle.r + d * d) / (2 * d);
         const h = Math.sqrt(this.r * this.r - a * a);

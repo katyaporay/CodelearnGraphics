@@ -34,12 +34,13 @@ export default class Constants {
     static constDiv = 100;
     static fWidth = 600;
     static fLength = 500;
-    static range = 1000;
-    static height = 400;
+    //static range = 1000;
+    //static height = 400;
     static viewPoint()
     {
-        return new Point3D(this.fWidth / 2, 200, 1200);
+        return new Point3D(this.fWidth / 2, 800, 2000);
     }
+
     static shiftX()
     {
         let leftPoint = SvgFunctions.getSvgPointWithoutShift(0, Constants.fLength);
@@ -47,7 +48,17 @@ export default class Constants {
         return -(leftPoint.x + rightPoint.x) / 2 + document.documentElement.clientWidth / 2;
     }
 
-    static eps = 1e-9;
+    static shiftY()
+    {
+        if (this.mode === "3d") {
+            let downPoint = SvgFunctions.getSvgPointWithoutShift(0, Constants.fLength);
+            let upPoint = SvgFunctions.getSvgPointWithoutShift(0, 0);
+            return -upPoint.y + downPoint.y - upPoint.y;
+        }
+        return 0;
+    }
+
+    static eps = 1e-3;
     static mode = "3d";
 
     static matrix() {
@@ -73,13 +84,24 @@ export default class Constants {
     static k() {
         if (Constants.mode === "3d")
         {
-            return document.documentElement.clientWidth / Constants.fWidth / 2;
+            const real = SvgFunctions.getProduct(
+                [[ 0, 0, Constants.fLength, 1 ]], Constants.matrix())[0];
+            const newPoint = new Point( real[0] / real[3], real[1] / real[3]);
+            const maxWidth = -newPoint.x * 2;
+            return document.documentElement.clientWidth / maxWidth;
         }
         else
         {
-            return Math.min(document.documentElement.clientWidth / Constants.fWidth,
-                Constants.height / Constants.fLength);
+            const docEl = document.documentElement;
+            return Math.min(docEl.clientWidth / Constants.fWidth,
+                docEl.clientHeight / Constants.fLength);
         }
+    }
+
+    static getHeight()
+    {
+        const svgPoint = SvgFunctions.getSvgPoint(0, Constants.fLength);
+        return svgPoint.y;
     }
 
     static chestColor = '#f2ce18';

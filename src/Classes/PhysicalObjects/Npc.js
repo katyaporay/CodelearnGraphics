@@ -9,6 +9,7 @@ import Ellipse from "../GeometricalFigures/Ellipse";
 import Dialog from "../ObjectsToLink/Dialog";
 import BoardObject from "./BoardObject";
 import SvgNpc2d from "../SvgObjects/Heroes/2d/SvgNpc2d";
+import Circle from "../GeometricalFigures/Circle";
 
 export default class Npc extends BoardObject
 {
@@ -18,17 +19,18 @@ export default class Npc extends BoardObject
         this.anim = null;
         this.linkedObjects = [new Dialog("", Npc.name)];
         this.height = Constants.npcLegRy + Constants.npcR * 2;
-        this.objectType = objectTypes.npc;
+        this.objectType = objectTypes.barrier;
         this.bearingArea = this.getBearingArea();
     }
 
     getBearingArea()
     {
-        const pointMin = new Point(this.center.x - Constants.npcR,
+        /*const pointMin = new Point(this.center.x - Constants.npcR,
             this.center.y - Constants.npcR);
         const pointMax = new Point(this.center.x + Constants.npcR,
             this.center.y + Constants.npcR);
-        return new Rectangle(pointMin, pointMax);
+        return new Rectangle(pointMin, pointMax);*/
+        return new Circle(this.center.x, this.center.y, Constants.npcR);
     }
 
     getReactComponent()
@@ -44,7 +46,6 @@ export default class Npc extends BoardObject
         }
     }
 
-
     getProjection()
     {
         const scale = SvgFunctions.getScale(this.center.x, this.center.y, this.height);
@@ -55,5 +56,10 @@ export default class Npc extends BoardObject
         const leg = new Ellipse(bottomPoint.x, bottomPoint.y - Constants.legRy * scale,
             Constants.npcLegRx * scale, Constants.npcLegRy * scale);
         return [body, leg];
+    }
+
+    clone()
+    {
+        return new Npc(this.center.x, this.center.y);
     }
 }

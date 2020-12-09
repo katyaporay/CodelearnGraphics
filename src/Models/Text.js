@@ -28,15 +28,15 @@ export default class Text extends React.Component {
   render() {
     // TODO: determine lineHeight and dy dynamically (using passed in props)
     const { lineHeight, capHeight, ...props } = this.props;
-    const dy = capHeight;
+    const dy = lineHeight;
     const { x, y } = props;
 
     this.props.setHeight((this.state.lines.length + 1) * lineHeight);
 
     return (
-      <text {...props} dy={`${dy}em`}>
+      <text {...props}>
         {this.state.lines.map((word, index) => (
-          <tspan x={x} y={y} dy={`${index * lineHeight}px`}>
+          <tspan x={x} y={y} dy={`${dy + index * lineHeight}px`}>
             {word}
           </tspan>
         ))}

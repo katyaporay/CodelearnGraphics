@@ -7,6 +7,7 @@ export default class SvgFunctions
     {
         let newPoint = this.getSvgPointWithoutShift(x, z, y);
         newPoint.x += Constants.shiftX();
+        newPoint.y += Constants.shiftY();
         return newPoint;
     }
 

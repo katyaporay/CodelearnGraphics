@@ -1,7 +1,7 @@
 {
   "field":{"width":600,"length":500},
   "character":
-    {"className":"Character","cx":534,"cy":200},
+    {"className":"Character","cx":384,"cy":150},
   "objects":[
     {"className":"Npc","cx":550,"cy":100},
     {"className":"Wall","minX":0,"minY":0,"maxX":10,"maxY":500,"height":10},
