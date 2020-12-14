@@ -5,3 +5,8 @@ export const objectTypes = Object.freeze({
     "character": 3,
     "npc": 4,
 });
+export const textTypes = Object.freeze({
+    "text": 0,
+    "true": 1,
+    "false": 2,
+});

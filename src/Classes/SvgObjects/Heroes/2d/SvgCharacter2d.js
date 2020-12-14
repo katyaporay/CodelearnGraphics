@@ -59,8 +59,7 @@ export default class SvgCharacter2d extends React.Component {
                         />
                         <circle cx={cx}
                              cy={cy}
-                             r={characterRx}
-                             fill={fill}
+                             r={characterRx} fill={fill}
                              stroke={stroke}
                              strokeWidth="3"/>
                         <Eye x={cx}

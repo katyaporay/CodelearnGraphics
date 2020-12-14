@@ -270,14 +270,14 @@ export default class Game extends React.Component
         }
     }
 
-    say(message)
+    say(message, type)
     {
         let linkedObjects = this.state.character._linkedObjects.slice();
         for (let i = 0; i < linkedObjects.length; i++)
         {
             if (linkedObjects[i].constructor.name === Dialog.name)
             {
-                linkedObjects[i] = new Dialog(message, Character.name);
+                linkedObjects[i] = new Dialog(message, Character.name, type);
             }
         }
         let character = this.state.character;
@@ -297,7 +297,7 @@ export default class Game extends React.Component
             });*/
     }
 
-    npcSay(message)
+    npcSay(message, type)
     {
         let npc;
         for (let i = 0; i < this.state.objects.length; i++)
@@ -314,7 +314,7 @@ export default class Game extends React.Component
         {
             if (linkedObjects[i].constructor.name === Dialog.name)
             {
-                linkedObjects[i] = new Dialog(message, Npc.name);
+                linkedObjects[i] = new Dialog(message, Npc.name, type);
             }
         }
         let objects = this.state.objects;
@@ -330,63 +330,105 @@ export default class Game extends React.Component
         });
     }
 
-    changeItem(num_chest, index, value)
+    goToChest(num_chest, callback)
     {
+        const cx = this.state.character.bearingArea.center.x,
+            cy = this.state.character.bearingArea.center.y;
         let objects = this.state.objects;
+        let newX, newY;
         for (let i = 0; i < objects.length; i++)
         {
             const object = objects[i];
             if (object.constructor.name !== ChestsArea.name)
                 continue;
-            object.changeInChest(num_chest, index, value);
+            const chest = object.chests[num_chest];
+            newX = chest.pointMax.x + this.state.character.bearingArea.r + 10;
+            newY = (chest.pointMin.y + chest.pointMax.y) / 2;
         }
+        let character = this.getNewCharacter(newX - cx, 0);
+        let anim = character._anim;
+        anim.onComplete = (() => {
+            let character2 = this.getNewCharacter(0, newY - cy);
+            let anim2 = character2._anim;
+            anim2.onComplete = callback;
+            character2.anim = anim2;
+            this.setState({
+                character: character2,
+            })
+        })
+        character.anim = anim;
         this.setState({
-            objects: objects,
+            character: character,
+        })
+        //this.move(newX - cx, 0);
+    }
+
+    changeItem(num_chest, index, value)
+    {
+        this.goToChest(num_chest, () => {
+            this.stop();
+            let objects = this.state.objects;
+            for(let i = 0; i < objects.length; i++)
+            {
+                const object = objects[i];
+                if (object.constructor.name !== ChestsArea.name)
+                    continue;
+                object.changeInChest(num_chest, index, value);
+            }
+            this.setState({
+                objects: objects,
+            })
         })
     }
 
     pushItem(num_chest, value)
     {
-        let objects = this.state.objects;
-        for (let i = 0; i < objects.length; i++)
-        {
-            const object = objects[i];
-            if (object.constructor.name !== ChestsArea.name)
-                continue;
-            object.pushToChest(num_chest, value);
-        }
-        this.setState({
-            objects: objects,
+        this.goToChest(num_chest, () => {
+            this.stop();
+            let objects = this.state.objects;
+            for (let i = 0; i < objects.length; i++) {
+                const object = objects[i];
+                if (object.constructor.name !== ChestsArea.name)
+                    continue;
+                object.pushToChest(num_chest, value);
+            }
+            this.setState({
+                objects: objects,
+            })
         })
     }
 
     insertItem(num_chest, index, value)
     {
-        let objects = this.state.objects;
-        for (let i = 0; i < objects.length; i++)
-        {
-            const object = objects[i];
-            if (object.constructor.name !== ChestsArea.name)
-                continue;
-            object.insertToChest(num_chest, index, value);
-        }
-        this.setState({
-            objects: objects,
+        this.goToChest(num_chest, () => {
+            this.stop();
+            let objects = this.state.objects;
+            for (let i = 0; i < objects.length; i++) {
+                const object = objects[i];
+                if (object.constructor.name !== ChestsArea.name)
+                    continue;
+                object.insertToChest(num_chest, index, value);
+            }
+            this.setState({
+                objects: objects,
+            })
         })
     }
 
     removeItem(num_chest, index)
     {
-        let objects = this.state.objects;
-        for (let i = 0; i < objects.length; i++)
-        {
-            const object = objects[i];
-            if (object.constructor.name !== ChestsArea.name)
-                continue;
-            object.removeFromChest(num_chest, index);
-        }
-        this.setState({
-            objects: objects,
+        this.goToChest(num_chest, () => {
+            this.stop();
+            let objects = this.state.objects;
+            for (let i = 0; i < objects.length; i++) {
+                const object = objects[i];
+                if (object.constructor.name !== ChestsArea.name)
+                    continue;
+                object.removeFromChest(num_chest, index);
+            }
+            this.setState({
+                objects: objects,
+            })
         })
     }
 
@@ -434,8 +476,8 @@ export default class Game extends React.Component
                     <button onClick={() => this.changeMode()}>Изменить вид</button>
                 </div>
                 <button onClick={() => this.restartGame()}>Перезапустить игру</button>
-                <GetMessage getMessage={(message) => this.say(message)}/>
-                <GetMessage getMessage={(message) => this.npcSay(message)}/>
+                <GetMessage getMessage={(message, type) => this.say(message, type)}/>
+                <GetMessage getMessage={(message, type) => this.npcSay(message, type)}/>
                 <br/>
                 <button onClick={() => this.addChest()}>
                     Добавить сундук

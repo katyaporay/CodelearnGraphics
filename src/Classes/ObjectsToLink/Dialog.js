@@ -3,10 +3,11 @@ import SvgDialog from "../SvgObjects/Heroes/SvgDialog";
 import React from "react";
 import Character from "../PhysicalObjects/Character";
 import Npc from "../PhysicalObjects/Npc";
+import {textTypes} from "../../Models/Types";
 
 export default class Dialog
 {
-    constructor(text, className) {
+    constructor(text, className, type = textTypes.text) {
         this.className = className;
         this.margin = 10;
         this.text = text;
@@ -19,6 +20,20 @@ export default class Dialog
             onComplete: (() => {
                 this.anim = null;
             })
+        }
+        if (type === textTypes.text)
+        {
+            this.fill = "#000000";
+            this.r = 5;
+        }
+        else if (type === textTypes.false)
+        {
+            this.fill = "#ff2626";
+            this.r = 0;
+        }
+        else if (type === textTypes.true) {
+            this.fill = "#68eb17";
+            this.r = 0;
         }
     }
 
@@ -75,6 +90,7 @@ export default class Dialog
                           text={this.text}
                           padding={this.padding}
                           width={this.getWidth()} anim={this.anim}
-                          setHeight={(height) => this.setHeight(height)}/>;
+                          setHeight={(height) => this.setHeight(height)}
+                          fill={this.fill} r={this.r}/>;
     }
 }
