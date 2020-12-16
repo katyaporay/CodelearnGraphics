@@ -7,6 +7,7 @@ import Cube from "../../GeometricalFigures/3D/Cube";
 import Constants from "../../../Models/Constants";
 import Rectangle from "../../GeometricalFigures/Rectangle";
 import Point from "../../GeometricalFigures/Point";
+import SvgArrow from "./SvgArrow";
 
 export default class SvgChest extends React.Component {
     getSvgItems()
@@ -19,13 +20,52 @@ export default class SvgChest extends React.Component {
         </g>
     }
 
+    getSvgArrows()
+    {
+        let itemWidth;
+        if (this.props.array.length > 0)
+            itemWidth = this.props.width / this.props.array.length;
+        else
+            itemWidth = this.props.width / 2;
+        return <g>
+            {this.props.arrows.map(object =>
+                this.getSvgArrow(object, itemWidth))}
+       </g>
+    }
+
+    getSvgArrow(object, width)
+    {
+        const x = this.getArrowX(object, width)
+        const y = this.props.y + this.props.length;
+        const point = SvgFunctions.getSvgPoint(x, y);
+        return <SvgArrow x={point.x} y={point.y} type={object.type}
+                         onComplete={() => this.props.onComplete(() => this.forceUpdate())}/>
+    }
+
+    getArrowX(object, width)
+    {
+        if (this.props.array.length === 0)
+            return this.props.width / 2
+        const index1 = object.index1, index2 = object.index2;
+        const x1 = this.getSvgItemX(index1, width) + width / 2
+        const x2 = this.getSvgItemX(index2, width) + width / 2
+        const x = (x1 + x2) / 2
+        return x;
+    }
+
     getSvgItem(item, index, width) {
-        const x = this.props.x + width * index;
+        const x = this.getSvgItemX(index, width);
         const y = this.props.y;
         return <SvgItem x={x} y={y}
                         width={width} length={this.props.length}
                         text={this.props.array[index]} anim={this.props.anim}
-                        height={this.props.height}/>
+                        height={this.props.height}
+                        onComplete={this.props.onComplete}/>
+    }
+
+    getSvgItemX(index, width)
+    {
+        return this.props.x + width * index;
     }
 
     getSvgBearingArea()
@@ -66,8 +106,7 @@ export default class SvgChest extends React.Component {
         if (this.props.array.length > 0) {
             return <g>
                 {this.getSvgItems()}
-                {/*{this.getAllCube().getReactComponent("#ffd91a")}
-            {this.getBottomCube().getCoverReactComponent("#ffefa1")}*/}
+                {this.getSvgArrows()}
             </g>
         }
         const bearingArea = new Rectangle(
@@ -75,6 +114,9 @@ export default class SvgChest extends React.Component {
             new Point(this.props.x + this.props.width, this.props.y + this.props.length)
         );
         const cube = new Cube(bearingArea, this.props.height);
-        return cube.getReactComponent(Constants.chestColor)
+        return <g>
+            {cube.getReactComponent(Constants.chestColor)}
+            {this.getSvgArrows()}
+        </g>
     }
 }

@@ -88,6 +88,11 @@ export default class ChestsArea extends BoardObject {
         this.chests[num_chest].changeItem(index, value);
     }
 
+    swapItemsInChest(num_chest, index1, index2)
+    {
+        this.chests[num_chest].swap(index1, index2);
+    }
+
     getProjection()
     {
         const projection = this.chests.reduce((result, chest) => {
@@ -97,10 +102,10 @@ export default class ChestsArea extends BoardObject {
         return projection;
     }
 
-    getReactComponent()
+    getReactComponent(board)
     {
         return <g>
-            {this.chests.map(chest => chest.getReactComponent())}
+            {this.chests.map(chest => chest.getReactComponent(board))}
         </g>
     }
 

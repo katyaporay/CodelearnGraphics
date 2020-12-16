@@ -29,6 +29,7 @@ import InsertItem from "./Debug/InsertItem";
 import RemoveItem from "./Debug/RemoveItem";
 import FiguresArray from "../Classes/GeometricalFigures/FiguresArray";
 import Circle from "../Classes/GeometricalFigures/Circle";
+import SwapItems from "./Debug/SwapItems";
 
 TweenOne.plugins.push(SvgDrawPlugin);
 
@@ -432,6 +433,23 @@ export default class Game extends React.Component
         })
     }
 
+    swapItems(num_chest, index1, index2)
+    {
+        this.goToChest(num_chest, () => {
+            this.stop();
+            let objects = this.state.objects;
+            for (let i = 0; i < objects.length; i++) {
+                const object = objects[i];
+                if (object.constructor.name !== ChestsArea.name)
+                    continue;
+                object.swapItemsInChest(num_chest, index1, index2);
+            }
+            this.setState({
+                objects: objects,
+            })
+        })
+    }
+
     addChest()
     {
         let objects = this.state.objects;
@@ -492,6 +510,8 @@ export default class Game extends React.Component
                         this.changeItem(num_chest, index, value)}/>
                     <InsertItem insertItem={(num_chest, index, value) =>
                         this.insertItem(num_chest, index, value)}/>
+                    <SwapItems swapItems={(num_chest, index1, index2) =>
+                        this.swapItems(num_chest, index1, index2)}/>
                 </div>
 
                 <div>

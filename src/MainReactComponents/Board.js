@@ -108,6 +108,7 @@ export default class Board extends React.Component{
         {
             objects.sort(cmp2d);
         }
+        const that = this;
         return(
             <svg width={document.documentElement.clientWidth} height={Constants.getHeight()}>
                 <rect x={0} y={0} width={document.documentElement.clientWidth}
@@ -115,7 +116,7 @@ export default class Board extends React.Component{
                       fill="#ffffff" stroke="#000000"/>
                       {rectangle.polygon.getReactComponent()}
                 {objects.map(object => (
-                    object.getReactComponent()
+                    object.getReactComponent(that)
                 ))}
                 {/*objects.map(object => (
                     object.getProjection().map(figure =>

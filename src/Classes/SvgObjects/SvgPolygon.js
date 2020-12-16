@@ -10,10 +10,11 @@ export default class SvgPolygon extends React.Component
         }
         let fill = "#C0C0C0";
         if (this.props.hasOwnProperty('fill'))
-        {
             fill = this.props.fill;
-        }
+        let stroke = "#A0A0A0";
+        if (this.props.hasOwnProperty('stroke'))
+            stroke = this.props.stroke
         return <polygon points={points}
-                        fill={fill} strokeWidth="3" stroke="#A0A0A0"/>;
+                        fill={fill} strokeWidth="3" stroke={stroke}/>;
     }
 }

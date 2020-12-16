@@ -135,5 +135,12 @@ export default class Animations {
         opacity: 0,
     }
 
+    static arrowAnim = {
+        duration: 200,
+        y: 10,
+        yoyo: true,
+        repeat: 4
+    }
+
     static dialogAnimation = [this.dialogAppear, this.dialogShow, this.dialogDisappear];
 }

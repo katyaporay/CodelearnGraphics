@@ -9,6 +9,7 @@ import Constants from "../../../Models/Constants";
 import TweenOne from "../../../src/TweenOne";
 import Rectangle from "../../GeometricalFigures/Rectangle";
 import Cube from "../../GeometricalFigures/3D/Cube";
+import SvgArrow from "./SvgArrow";
 
 export default class SvgItem extends React.Component
 {
