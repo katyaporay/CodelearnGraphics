@@ -110,8 +110,12 @@ export default class Text extends React.Component {
       return result;
     }, []);
 
-    if (this.props.hasOwnProperty('height')) {
-      const maxCountLines = Math.floor(this.props.height / this.props.lineHeight);
+    if (this.props.hasOwnProperty('height') || this.props.hasOwnProperty('lines')) {
+      let maxCountLines
+      if (this.props.hasOwnProperty('height'))
+        maxCountLines = Math.floor(this.props.height / this.props.lineHeight);
+      else
+        maxCountLines = this.props.lines
       if (wordsByLines.length > maxCountLines) {
         wordsByLines = wordsByLines.slice(0, maxCountLines);
         const lastLineWords = wordsByLines[wordsByLines.length - 1].words;

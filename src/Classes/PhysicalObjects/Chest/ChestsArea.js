@@ -6,6 +6,7 @@ import Chest from "./Chest";
 import React from "react";
 import {objectTypes} from "../../../Models/Types";
 import FiguresArray from "../../GeometricalFigures/FiguresArray";
+import SvgPolygon from "../../SvgObjects/SvgPolygon";
 
 export default class ChestsArea extends BoardObject {
     constructor(minX, minY, maxX, maxY, height) {
@@ -62,9 +63,9 @@ export default class ChestsArea extends BoardObject {
         return { space, chestWidth };
     }
 
-    addChest(name)
+    addChest(type, name)
     {
-        this.chests.push(new Chest(name, 0, 0, 0, 0, this.height, []));
+        this.chests.push(new Chest(name, 0, 0, 0, 0, this.height, [], type));
         this.updateChestsPosition();
     }
 
@@ -105,6 +106,7 @@ export default class ChestsArea extends BoardObject {
     getReactComponent(board)
     {
         return <g>
+            {this.bearingArea.polygon.getReactComponent("#fdff82")}
             {this.chests.map(chest => chest.getReactComponent(board))}
         </g>
     }

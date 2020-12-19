@@ -103,6 +103,4 @@ export default class Constants {
         const svgPoint = SvgFunctions.getSvgPoint(0, Constants.fLength);
         return svgPoint.y;
     }
-
-    static chestColor = '#f2ce18';
 }

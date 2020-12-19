@@ -152,7 +152,7 @@ export default class Polygon
         return null;
     }
 
-    getReactComponent()
+    getReactComponent(fill="#A7A7D7")
     {
         let svgPoints = [];
         for (let i = 0; i < this.points.length; i++)
@@ -160,7 +160,7 @@ export default class Polygon
             svgPoints.push(SvgFunctions.getSvgPoint(this.points[i].x, this.points[i].y));
         }
         const svgPolygon = new Polygon(svgPoints);
-        return <SvgPolygon polygon={svgPolygon} fill="#A7A7D7"/>;
+        return <SvgPolygon polygon={svgPolygon} fill={fill}/>;
     }
 
     getY()

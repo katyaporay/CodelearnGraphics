@@ -1,7 +1,7 @@
 import React from "react";
 import Board from "./Board";
 import Constants from "../Models/Constants";
-import {objectTypes} from "../Models/Types";
+import {chestTypes, objectTypes} from "../Models/Types";
 import Character from "../Classes/PhysicalObjects/Character";
 import Animations from "../Models/Animations";
 import Crown from "../Classes/PhysicalObjects/Crown";
@@ -174,7 +174,7 @@ export default class Game extends React.Component
         return this.checkDoesCollide(this.state.character.fallingArea, objectTypes.death);
     }
 
-    getNewCharacter(animX, animY)
+    getNewCharacter(animX, animY, callback)
     {
         console.log("countSteps = " + Math.ceil(Constants.durationGo * Math.abs(animX + animY)
                 / Constants.durationStep));
@@ -199,7 +199,7 @@ export default class Game extends React.Component
                 x: nowPoint.x - newPoint.x,
                 y: nowPoint.y - newPoint.y,
                 onUpdate: (() => this.go()),
-                onComplete: (() => this.stop()),
+                onComplete: (() => this.stop(callback)),
                 scale: animScale,
                 ease: "linear",
             },
@@ -221,7 +221,7 @@ export default class Game extends React.Component
         //this.forceUpdate();
     }
 
-    move(animX, animY)
+    move(animX, animY, callback)
     {
         if (this.state.character._anim != null) return;
         while (!this.checkCanGo(animX, animY))
@@ -231,44 +231,21 @@ export default class Game extends React.Component
             if (animX === 0 && animY === 0) return;
         }
         this.setState({
-            character: this.getNewCharacter(animX, animY),
+            character: this.getNewCharacter(animX, animY, callback),
         });
     }
 
-    stop()
+    stop(callback)
     {
         let character = this.state.character;
         character.setAnim(null, 0, 0);
-        this.setState({
-            character: character,
-        })
-        /*this.setState({
-            character: new Character(
-                this.state.character.center.x,
-                this.state.character.center.y,
-                null,
-                0,
-                0,
-                this.state.character.linkedObjects,
-            )
-        });*/
         if (this.checkIsDying())
         {
             character.setAnim(Animations.getAnimFallDown(), 0, 0);
-            this.setState({
-                character: character,
-            })
-            /*this.setState({
-                character: new Character(
-                    this.state.character.center.x,
-                    this.state.character.center.y,
-                    Animations.getAnimFallDown(),
-                    0,
-                    0,
-                    this.state.character.linkedObjects,
-                )
-            });*/
         }
+        this.setState({
+            character: character,
+        }, callback)
     }
 
     say(message, type)
@@ -346,22 +323,8 @@ export default class Game extends React.Component
             newX = chest.pointMax.x + this.state.character.bearingArea.r + 10;
             newY = (chest.pointMin.y + chest.pointMax.y) / 2;
         }
-        let character = this.getNewCharacter(newX - cx, 0);
-        let anim = character._anim;
-        anim.onComplete = (() => {
-            let character2 = this.getNewCharacter(0, newY - cy);
-            let anim2 = character2._anim;
-            anim2.onComplete = callback;
-            character2.anim = anim2;
-            this.setState({
-                character: character2,
-            })
-        })
-        character.anim = anim;
-        this.setState({
-            character: character,
-        })
-        //this.move(newX - cx, 0);
+        this.move(newX - cx, 0,
+            () => this.move(0, newY - cy, callback));
     }
 
     changeItem(num_chest, index, value)
@@ -450,7 +413,7 @@ export default class Game extends React.Component
         })
     }
 
-    addChest()
+    addChest(type)
     {
         let objects = this.state.objects;
         for (let i = 0; i < objects.length; i++)
@@ -458,7 +421,7 @@ export default class Game extends React.Component
             const object = objects[i];
             if (object.constructor.name !== ChestsArea.name)
                 continue;
-            object.addChest();
+            object.addChest(type, "chestName sdkfjsldfjslkdjfsldjk; fsk djfl;sdjflasdkjf a;sldkfj;a s");
         }
         this.setState({
             objects: objects,
@@ -497,8 +460,11 @@ export default class Game extends React.Component
                 <GetMessage getMessage={(message, type) => this.say(message, type)}/>
                 <GetMessage getMessage={(message, type) => this.npcSay(message, type)}/>
                 <br/>
-                <button onClick={() => this.addChest()}>
-                    Добавить сундук
+                <button onClick={() => this.addChest(chestTypes.array)}>
+                    Добавить сундук (array)
+                </button>
+                <button onClick={() => this.addChest(chestTypes.vector)}>
+                    Добавить сундук (vector)
                 </button>
 
                 <div style={{float: 'right', margin: 50}}>
@@ -549,6 +515,7 @@ export default class Game extends React.Component
                 default:
             }
         });
+        this.forceUpdate()
     }
 
     cloneInitialState()

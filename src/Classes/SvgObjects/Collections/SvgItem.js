@@ -34,7 +34,7 @@ export default class SvgItem extends React.Component
         const cube = new Cube(this.getBearingArea(), this.props.height)
         return <TweenOne anim={this.props.anim} component="g">
             <g>
-                {cube.getReactComponent(Constants.chestColor)}
+                {cube.getCoverReactComponent(this.props.color)}
                 {this.getText()}
             </g>
         </TweenOne>
@@ -42,6 +42,7 @@ export default class SvgItem extends React.Component
 
     getText()
     {
+        const scale = SvgFunctions.getScale(this.props.x, this.props.y, this.props.height)
         let minPoint, maxPoint;
         if (Constants.mode === "3d")
         {
@@ -56,15 +57,18 @@ export default class SvgItem extends React.Component
             maxPoint = SvgFunctions.getSvgPoint(this.props.x + this.props.width,
                 this.props.y + this.props.length);
         }
-        const width = maxPoint.x - minPoint.x;
-        const height = maxPoint.y - minPoint.y;
-        return <Text x={minPoint.x + this.state.leftPadding}
-                      y={minPoint.y + this.state.upPadding}
-                      setHeight={(height) => this.setHeight(height)}
-                      width={width - 2 * this.state.leftPadding}
-                      style={{fontSize: 10}} height={height - this.state.upPadding * 2}>
-                    {this.props.text}
-                </Text>
+        const width = (maxPoint.x - minPoint.x) / scale;
+        const height = (maxPoint.y - minPoint.y) / scale;
+        const transformOrigin = minPoint.x + "px " + minPoint.y + "px"
+        return <g style={{transformOrigin: transformOrigin}} transform={"scale(" + scale + ")"}>
+            <Text x={minPoint.x + this.state.leftPadding}
+                          y={minPoint.y + this.state.upPadding}
+                          setHeight={(height) => this.setHeight(height)}
+                          width={width - 2 * this.state.leftPadding}
+                          style={{fontSize: 10}} height={height - this.state.upPadding * 2}>
+                        {this.props.text}
+                    </Text>
+        </g>
     }
 
     getCap() {

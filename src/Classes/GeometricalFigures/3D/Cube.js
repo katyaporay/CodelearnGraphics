@@ -72,18 +72,26 @@ export default class Cube {
     {
         const [leftPolygon, rightPolygon, frontPolygon, capPolygon] = this.getReactPolygons();
 
-        let polygons = [];
-        if (frontPolygon.getMinX() - leftPolygon.getMinX() > Constants.eps)
-        {
-            polygons.push(leftPolygon);
+        if (Constants.mode === "3d") {
+            /*let polygons = [];
+            if (frontPolygon.getMinX() - leftPolygon.getMinX() > Constants.eps) {
+                polygons.push(leftPolygon);
+            }
+            if (rightPolygon.getMaxX() - frontPolygon.getMaxX() > Constants.eps) {
+                polygons.push(rightPolygon);
+            }
+            polygons.push(frontPolygon);
+            return <g>
+                {polygons.map(polygon => <SvgPolygon polygon={polygon} fill={fill}/>)}
+            </g>*/
+            return <g>
+                <SvgPolygon polygon={frontPolygon} fill={fill}/>
+            </g>
         }
-        if (rightPolygon.getMaxX() - frontPolygon.getMaxX() > Constants.eps)
-        {
-            polygons.push(rightPolygon);
+        else {
+            return <g>
+                <SvgPolygon polygon={capPolygon} fill={fill}/>
+            </g>
         }
-        polygons.push(frontPolygon);
-        return <g>
-            {polygons.map(polygon => <SvgPolygon polygon={polygon} fill={fill}/>)}
-        </g>
     }
 }

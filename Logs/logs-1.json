@@ -1,0 +1,10 @@
+[
+  {"name": "Go", "x": 10, "y": 20},
+  {"name": "Say", "who": "Character", "message": "Hello!",
+    "type": "text"
+  },
+  {"name": "Say", "who": "Npc", "message": "I am npc. Hello!", "type": "text"},
+  {"name": "Say", "who": "Character", "message": "a == 1", "type": "false"},
+  {"name": "ArrayOperation", "arrayName": "b", "operation": "push_back", "value": "10"},
+  {"name": "ArrayOperation", "arrayName": "first", "operation": "change", "index": 0, "newValue": "val"}
+]

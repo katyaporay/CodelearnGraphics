@@ -8,7 +8,7 @@ import BoardObject from "../BoardObject";
 
 export default class Chest extends BoardObject
 {
-    constructor(name, minX, minY, maxX, maxY, height, array) {
+    constructor(name, minX, minY, maxX, maxY, height, array, type) {
         super();
         this.name = name;
         this.pointMin = new Point(minX, minY);
@@ -17,7 +17,7 @@ export default class Chest extends BoardObject
         this.array = array;
         this.oldArray = array.slice();
         this.arrows = []
-
+        this.type = type;
         this.objectType = objectTypes.barrier;
     }
 
@@ -96,7 +96,8 @@ export default class Chest extends BoardObject
                       height={this.height}
                       array={this.oldArray}
                       bearingArea={this.bearingArea} arrows={this.arrows}
-                      onComplete={() => this.onChangeComplete(board)}/>
+                      onComplete={() => this.onChangeComplete(board)}
+                      type={this.type} name={this.name}/>
         </g>
     }
 }

@@ -6,6 +6,7 @@ import SvgPolygon from "../SvgPolygon";
 import TweenOne from "../../../src/TweenOne";
 import Animations from "../../../Models/Animations";
 import {changeArrayTypes} from "../../../Models/Types";
+import Constants from "../../../Models/Constants";
 
 export default class SvgArrow extends React.Component
 {
@@ -58,9 +59,12 @@ export default class SvgArrow extends React.Component
             new Point(this.props.x + 5, this.props.y + 30)
         )
         return (
-            <TweenOne animation={this.anim} component="g">>
-                <SvgPolygon polygon={triangle} fill={this.fill} stroke={this.stroke}/>
-                <SvgPolygon polygon={rectangle.polygon} fill={this.fill} stroke={this.stroke}/>
+            <TweenOne animation={this.anim} component="g">
+                <g style={{transformOrigin: `${this.props.x}px ${this.props.y}px`}}
+                    transform={Constants.mode === "3d" ? "scale(1, -1)" : "scale(1, 1)"}>
+                    <SvgPolygon polygon={triangle} fill={this.fill} stroke={this.stroke}/>
+                    <SvgPolygon polygon={rectangle.polygon} fill={this.fill} stroke={this.stroke}/>
+                </g>
             </TweenOne>
         );
     }

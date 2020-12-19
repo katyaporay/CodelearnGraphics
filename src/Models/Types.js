@@ -7,9 +7,9 @@ export const objectTypes = Object.freeze({
 });
 
 export const textTypes = Object.freeze({
-    "text": 0,
-    "true": 1,
-    "false": 2,
+    "text": "text",
+    "true": "true",
+    "false": "false",
 });
 
 export const changeArrayTypes = Object.freeze({
@@ -18,4 +18,9 @@ export const changeArrayTypes = Object.freeze({
     "remove": 2,
     "change": 3,
     "swap": 4,
+})
+
+export const chestTypes = Object.freeze({
+    "array": "array",
+    "vector": "vector",
 })
